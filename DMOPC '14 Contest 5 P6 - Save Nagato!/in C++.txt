@@ -1,0 +1,97 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+struct Node{
+	int lT;
+	vector<Node*> paths;
+	
+	Node(){
+		lT =INT_MAX;
+	}
+	
+};
+
+int nodes;
+
+Node *highest;
+int highestVal;
+int info [500000][2];
+
+Node node[500000]; 
+
+void DFS(Node* current, int time){
+	int size = current->paths.size();
+	for(int i = 0 ; i < size;i++){
+		
+		Node *f  = current->paths[i];
+		 
+		if(f->lT>time+1){
+			f->lT = time+1;
+			if(time+1>highestVal){
+				highestVal = time+1;
+				highest = f;
+				
+			}
+			DFS(f,time+1);
+		}
+	}
+}
+
+void reset(){
+	for(int i = 0 ; i < nodes ; i++){
+		node[i].lT=INT_MAX;
+	}
+}
+
+void reset2(int c){
+	for(int i = 0 ; i < nodes ; i++){
+		info[i][c] = node[i].lT;
+		node[i].lT=INT_MAX;
+	}
+}
+void start(Node *i){
+	i->lT = 0;
+	highestVal = 0;
+	DFS(i,0);
+	
+}
+
+int main(){
+	scanf("%i", &nodes);
+	
+	for(int i = 0 ; i < nodes-1 ; i++){
+		int a, b;
+		scanf("%i%i", &a, &b);
+		a--;
+		b--;
+		node[a].paths.push_back(&node[b]);
+		node[b].paths.push_back(&node[a]);
+	}
+//	printf("\n");
+//	for(int i = 0 ; i < islands ; i++){
+//		int size = island[i].paths.size();
+//		
+//		for(int i2 = 0 ; i2 < size;i2++){
+//			route r=island[i].paths[i2];
+//			printf("%i %i %i %i \n", i,r.dest, r.time,r.damage);
+//		}
+//	}
+//	printf("\n");
+	//int h, t; 
+	//scanf("%i%i", &h, &t);
+	start(&node[0]);
+//	for(int i = 0 ; i < nodes ; i++){
+//		printf("%i \n" , &node[i]);
+//	}
+//	printf("%i \n", highest);
+	reset();
+	start(highest);
+	reset2(0);
+	start(highest);
+	reset2(1);
+	for(int i = 0 ; i < nodes; i ++){
+		printf("%i\n",max(info[i][0],info[i][1])+1);
+	}
+	
+}

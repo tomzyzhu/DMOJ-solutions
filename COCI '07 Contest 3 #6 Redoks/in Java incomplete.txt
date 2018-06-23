@@ -1,0 +1,60 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class Redoks {
+	public static int [] info;
+	public static int [] tree;
+	public static int size;
+	public static void update(int index, int value) {
+		index++;
+		while(index<=size) {
+			tree[index-1]+=value;
+			index+= (index&-index);
+		}
+	}
+	public static int query (int index) {
+		index++;
+		int sum = 0;
+		while(index>0) {
+			sum += tree[index-1];
+			index-=(index&-index);
+		}
+		return sum;
+	}
+	
+	public static void main(String[] args) {
+		BufferedReader in = new BufferedReader (new InputStreamReader(System.in));
+
+		try {
+			String [] t = in.readLine().split(" ");
+			int a = Integer.parseInt(t[0]);
+			int b = Integer.parseInt(t[1]);
+			info = new int[a];
+			tree = new int[a];
+			size = a;
+			t = in.readLine().split(" ");
+			for(int i = 0 ; i < a; i ++) {
+				info[i] = Integer.parseInt(Character.toString(t[0].charAt(i)));
+				update(i, info[i]);
+				//System.out.println(info[i]);
+			}
+			for(int i = 0 ; i < b ; i ++) {
+				t = in.readLine().split(" ");
+				int x = Integer.parseInt(t[0])-1;
+				int y = Integer.parseInt(t[1])-1;
+				System.out.println(query(y)-query(x-1));
+				for(int i2 = x; i2<=y; i2++) {
+					if(info[i2] == 9) {
+						info[i2] = 0;
+						update(i2, -9);
+					}else {
+						info[i2]++;
+						update(i2, 1);
+					}
+				}
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+}

@@ -1,0 +1,23 @@
+import java.util.Scanner;
+
+public class Tri {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		
+		int a = input.nextInt();
+		int b = input.nextInt();
+		if(b-a<=0) {
+			System.out.println("Congratulations, you are within the speed limit!");
+		}else {
+			int fine;
+			if (b-a<=20) {
+				fine = 100;
+			}else if (b-a<=30) {
+				fine = 270;
+			}else {
+				fine = 500;
+			}
+			System.out.println("You are speeding and your fine is $"+fine + ".");
+		}
+	}
+}

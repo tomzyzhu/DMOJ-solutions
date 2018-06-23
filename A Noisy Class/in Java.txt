@@ -1,0 +1,53 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+
+public class NOisy {
+	public static int n;
+	public static int con;
+	public static Student [] s = new Student[10000];
+	public static ArrayList<Integer> stack = new ArrayList<Integer>();
+	public static String t[];
+	public static void main(String[] args) {
+		
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		
+		try {
+			n = Integer.parseInt(in.readLine());
+			con = Integer.parseInt(in.readLine());
+			for(int i = 0 ; i < n ; i ++) {
+				s[i] = new Student();
+			}
+			for(int i = 0 ; i < con ; i ++) {
+				t = in.readLine().split(" ");
+				s[Integer.parseInt(t[0])-1].c.add(Integer.parseInt(t[1])-1);
+				//System.out.println((Integer.parseInt(t[0])-1) + " goes to " + (Integer.parseInt(t[1])-1));
+			}
+			for(int i = 0 ; i < n ; i ++) {
+				dfs(i);
+			}
+			System.out.println("Y");
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	public static void dfs(int current) {
+		//System.out.println("at " + current);
+		if(stack.contains(current)) {
+			System.out.println("N");
+			System.exit(0);
+		}else {
+			stack.add(current);
+		}
+		int size = s[current].c.size();
+		for (int i = 0 ; i < size ; i ++) {
+			dfs(s[current].c.get(i));
+		}
+		stack.remove(new Integer(current));
+	}
+}
+class Student {
+	public ArrayList <Integer> c = new ArrayList<Integer>();
+	
+}

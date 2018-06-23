@@ -1,0 +1,112 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashSet;
+
+public class Review {
+	public static int n;
+	public static int aftern;
+	public static int m;
+	public static String [] t;
+	public static HashSet<Integer> ms = new HashSet<Integer>(99999);
+	public static Node3[] node = new Node3[100000];
+	public static int possiblestart;
+	public static int most = 0;
+	public static int mosti;
+	public static Q que = new Q();
+	public static void main(String[] args) {
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		try {
+			t = in.readLine().split(" ");
+			n = Integer.parseInt(t[0]);
+			aftern = n;
+			m = Integer.parseInt(t[1]);
+			t = in.readLine().split(" ");
+			for(int i = 0 ; i < m ; i++) {
+				ms.add(Integer.parseInt(t[i]));
+			}
+			for(int i = 0 ; i < n ; i ++) {
+				node[i] = new Node3();
+				que.add(i);
+			}
+			for(int i = 0 ; i < n-1; i ++) {
+				t = in.readLine().split(" ");
+				int t1 = Integer.parseInt(t[0]);
+				int t2 = Integer.parseInt(t[1]);
+				node[t1].c.add(t2);
+				node[t2].c.add(t1);
+				if(node[t1].c.size()>1) {
+					que.remove(t1);
+				}if(node[t2].c.size()>1) {
+					que.remove(t2);
+				}
+			}
+			trim();
+			
+			dfs(possiblestart, 0);
+			clear();
+			dfs(mosti,0);
+			System.out.println(2*(aftern-1)-most);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	private static void trim() {
+//		for(int i = 0 ; i < n ; i ++ ) {
+//			if(node[i].c.size()==1&&!ms.contains(i)) {
+//				//System.out.println("qued " + i);
+//				que.add(i);
+//			}
+//		}
+		while(!que.isEmpty()) {
+			int n = que.next();
+			//System.out.println("gate " + n + " "  + ms.contains(n));
+			if(!ms.contains(n)&&node[n].c.size()==1) {
+				int temp =  node[n].c.get(0);
+				//System.out.println("cut " + n + " " + temp);
+				que.add(temp);
+				node[temp].c.remove(new Integer(n));
+				node[n].c.remove(new Integer(temp));
+				aftern--;
+			}else {
+				possiblestart = n;
+			}
+		}
+		//System.out.println(possiblestart);
+	}
+	
+	public static void clear() {
+		for(int i = 0 ; i < n ; i ++ ) {
+			node[i].lowestd=Integer.MAX_VALUE;
+		}
+		most = 0;
+	}
+	
+	public static void dfs(int current, int d) {
+		node[current].lowestd = d;
+		if(d>most) {
+			most = d;
+			mosti = current;
+		}
+		int s = node[current].c.size();
+		for(int i = 0 ; i < s ; i ++) {
+			if(node[node[current].c.get(i)].lowestd>d+1) {
+				dfs(node[current].c.get(i), d+1);
+			}
+		}
+	}
+}
+
+class Node3{
+	public int lowestd = Integer.MAX_VALUE;
+	public ArrayList <Integer> c = new ArrayList<Integer>();
+}
+
+class Q extends HashSet<Integer>{
+
+	public int next() {
+		int temp = this.iterator().next();
+		this.remove(this.iterator().next());
+		return temp;
+	}
+}

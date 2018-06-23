@@ -1,0 +1,78 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+struct island;
+
+struct route {
+	int dest,time;
+	route(int d, int t){
+		dest = d;
+		time = t;
+	}
+};
+
+struct Node{
+	int lT;
+	vector<route> paths;
+	
+	Node(){
+		lT = 1000000000;
+	}
+	
+};
+
+int nodes;
+int routes;
+
+Node node[2000]; 
+
+void DFS(int current, int time){
+	int size = node[current].paths.size();
+	for(int i = 0 ; i < size;i++){
+		route *r = &node[current].paths[i];
+		 
+		if(node[r->dest].lT>time+r->time){
+			node[r->dest].lT = time+r->time;
+			DFS(r->dest,time+r->time);
+		}
+	}
+}
+
+void start(int index){
+	node[index].lT = 0;
+	DFS(index,0);
+}
+int main(){
+	scanf("%i%i", &nodes, &routes);
+	
+	while(routes--){
+		int a, b, time;
+		scanf("%i%i%i", &a, &b, &time);
+		a--;
+		b--;
+		node[a].paths.push_back(route(b, time));
+		node[b].paths.push_back(route(a, time));
+	}
+//	printf("\n");
+//	for(int i = 0 ; i < islands ; i++){
+//		int size = island[i].paths.size();
+//		
+//		for(int i2 = 0 ; i2 < size;i2++){
+//			route r=island[i].paths[i2];
+//			printf("%i %i %i %i \n", i,r.dest, r.time,r.damage);
+//		}
+//	}
+//	printf("\n");
+	//int h, t; 
+	//scanf("%i%i", &h, &t);
+	start(0);
+	for(int t = 0 ; t < nodes ; t++){
+		
+		if(node[t].lT == 1000000000){
+			printf("-1\n");
+		}else {
+			printf("%i\n", node[t].lT);
+		}
+
+	}
+}

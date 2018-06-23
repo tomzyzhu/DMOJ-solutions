@@ -1,0 +1,159 @@
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class HOT {
+
+	public static final int size = 200001;
+	public static long [][]st = new long[size][(int)(Math.log(size)/Math.log(2))+1];
+	public static long [][]index = new long[size][(int)(Math.log(size)/Math.log(2))+1];
+	
+	public static int n;
+	public static int on;
+	public static int currenti = 0;
+
+	public static Node2w [] node;
+
+	public static void dfs (int current, int previous, long distance) {
+		if (previous !=-1)
+			node[current].p = node[previous];
+		node[current].distance=distance;
+		node[current].dfsnum = currenti;
+		st[currenti][0] =distance;
+		index[currenti][0]=current;
+		currenti++;
+		int size = node[current].c.size();
+		for(int i = 0 ; i<size; i ++) {
+			if(node[current].c.get(i)!=previous) {
+				dfs(node[current].c.get(i),current,distance+1);
+				st[currenti][0] = distance;
+				index[currenti][0]=current;
+				currenti++;
+			}
+		}
+		//System.out.println(current + " " + distance);
+		n = currenti;
+	}
+
+	public static void build(){
+		for(int currentk = 1; (int)Math.pow(2, currentk)-1<n; currentk++){
+			for(int i = 0 ; i+(int)Math.pow(2, currentk)-1<n; i ++){
+				//System.out.println(st[i][currentk-1] + " " + st[i+(int)(Math.pow(2,currentk-1))][currentk-1]);
+				st[i][currentk] = Math.min(st[i][currentk-1], st[i+(int)(Math.pow(2,currentk-1))][currentk-1]);
+				if(st[i][currentk] == st[i][currentk-1])
+					index [i][currentk] = index[i][currentk-1];
+				else
+
+					index [i][currentk] = index[i+(int)(Math.pow(2,currentk-1))][currentk-1];
+			}
+		}
+	}
+
+	public static long min(int l, int r) {
+		int temp = Math.min(l, r);
+		r = Math.max(l, r);
+		l = temp;
+		int k = (int)(Math.log(r-l+1)/Math.log(2));
+		return Math.min(st[l][k], st[r-(int)(Math.pow(2, k))+1][k]);
+	}
+	
+	public static long lca(int l, int r) {
+		int temp = Math.min(l, r);
+		r = Math.max(l, r);
+		l = temp;
+		int k = (int)(Math.log(r-l+1)/Math.log(2));
+		if(min(l, r) == st[l][k])
+			return index[l][k];
+		else
+			return index[r-(int)(Math.pow(2, k))+1][k];
+	}
+
+	public static long dist (Node2w n1, Node2w n2) {
+		return n1.distance+n2.distance-(2*min(n1.dfsnum,n2.dfsnum));
+	}
+	public static void main(String[] args) {
+		BufferedReader in = new BufferedReader (new InputStreamReader(System.in));
+
+		try {
+
+			String[]t = in.readLine().split(" ");
+			n = Integer.parseInt(t[0]);
+			on = n;
+			int q = Integer.parseInt(t[1]);
+			node =new Node2w[n];
+			for(int i = 0 ; i < n ; i ++) {
+				node[i] = new Node2w();
+			}
+
+			for(int i = 0 ; i < n-1 ; i ++) {
+				t = in.readLine().split(" ");
+				int n1 = Integer.parseInt(t[0])-1;
+				int n2 = Integer.parseInt(t[1])-1;
+
+				node[n1].c.add(n2);
+
+				node[n2].c.add(n1);
+			}
+			dfs(0,-1,0);
+			build();
+			for(int i = 0 ; i < q; i ++) {
+				t = in.readLine().split(" ");
+				//				int l = node[Integer.parseInt(t[0])].dfsnum;
+				//				int r = node[Integer.parseInt(t[1])].dfsnum;
+				//				if(l>r) {
+				//					int temp = l;
+				//					l = r;
+				//					r = temp;
+				//				}
+				//				long lca = min(l, r);
+				//				System.out.println(node[Integer.parseInt(t[0])].distance+node[Integer.parseInt(t[1])].distance-(2*lca));
+//				System.out.println(Arrays.toString(t));
+				Node2w goal = node[(int)lca(node[Integer.parseInt(t[0])-1].dfsnum, node[Integer.parseInt(t[1])-1].dfsnum)];
+				Node2w trying  = node[Integer.parseInt(t[2])-1];
+				Node2w c  = node[Integer.parseInt(t[0])-1];
+				while(c != goal) {
+					c.val+= dist(c, trying);
+					c = c.p;
+//					for(int i2 = 0 ; i2 < on ; i2 ++) {
+//						System.out.print(node[i2].val+" ");
+//					}
+//					System.out.println();
+				}
+
+				c  = node[Integer.parseInt(t[1])-1];
+				while(c != goal) {
+					c.val+= dist(c, trying);
+					c = c.p;
+//					for(int i2 = 0 ; i2 < on ; i2 ++) {
+//						System.out.print(node[i2].val+" ");
+//					}
+//					System.out.println();
+				}
+				goal.val+= dist(goal, trying);
+				
+				
+//				for(int i2 = 0 ; i2 < on ; i2 ++) {
+//					System.out.print(node[i2].val+" ");
+//				}
+//				System.out.println();
+			}
+			for(int i = 0 ; i < on ; i ++) {
+				System.out.print(node[i].val+" ");
+			}
+//			System.out.println();
+//			System.out.println(dist(node[3], node[1])+ " " + dist(node[1], node[3]));
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+}
+
+class Node2w{
+	public ArrayList<Integer> c = new ArrayList<Integer>();
+	public int dfsnum;
+	public long distance=-1;
+	public Node2w p;
+	public long val = 0;
+}

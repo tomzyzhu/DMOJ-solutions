@@ -1,0 +1,21 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.math.BigDecimal;
+
+public class present {
+	public static void main(String[] args) {
+		BufferedReader in = new BufferedReader(new InputStreamReader (System.in));
+		try {
+			int n = Integer.parseInt(in.readLine());
+			int low = Integer.MAX_VALUE;
+			String [] t = in.readLine().split(" ");
+			for(int i = 0 ; i < t.length ; i ++) {
+				low = Math.min(low, Integer.parseInt(t[i]));	
+			}
+			System.out.println(low);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+}

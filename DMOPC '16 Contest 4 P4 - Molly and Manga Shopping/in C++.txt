@@ -1,0 +1,116 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int B = 1;
+int Qs;
+int N;
+int V[100000];//actual values
+int F[100000];//frequency table
+int ans = 0;
+
+int L = 0;
+int R = 0;
+
+struct Query {
+    int l;
+    int r;
+    int id;
+    int val;
+};
+Query QL [100000];//Query informations
+
+bool cmp(Query const& a, Query const& b){
+    if(a.l/B != b.l/B)
+        return a.l/B <b.l/B ;
+
+    return a.r<b.r;
+}
+bool reord(Query const& a, Query const& b){
+    return a.id<=b.id;
+}
+int main()
+{
+    scanf("%i", &N);
+    B = (int)(sqrt(N));
+
+
+    for(int i = 0 ; i < N ; i ++){
+        int a;
+        scanf("%i", &a);
+        V[i] = a-1;
+    }
+
+    scanf("%i", &Qs);
+    for(int i = 0 ; i < Qs; i ++){
+        scanf("%i%i", &QL[i].l,&QL[i].r);
+
+        QL[i].l--;
+        QL[i].r--;
+        QL[i].id=i;
+    }
+    sort(QL, QL+Qs, &cmp);
+    F[V[0]]++;
+    for(int i = 0 ; i < Qs; i ++){
+        //printf("%i %i %i\n", QL[i].l,QL[i].r,QL[i].id);
+        while(R<QL[i].r){
+            R++;
+            //printf("R at %i and has %i ", R, F[V[R]]);
+            if(F[V[R]]%2==1){
+                ans++;
+                //printf("Added");
+            }else if(F[V[R]]!=0){
+                ans--;
+                //printf("Subtracted");
+            }
+            //printf("\n");
+            F[V[R]]++;
+        }
+        while(R>QL[i].r){
+            F[V[R]]--;
+            //printf("R at %i and has %i ", R, F[V[R]]);
+            if(F[V[R]]%2==1){
+                ans--;
+                //printf("Subtracted");
+            }else if (F[V[R]]!=0){
+                //printf("Added");
+                ans++;
+            }
+            //printf("\n");
+            R--;
+        }
+        while(L>QL[i].l){
+            L--;
+            //printf("L at %i and has %i ", L, F[V[L]]);
+            if(F[V[L]]%2==1){
+                //printf("Added");
+                ans++;
+            }else if(F[V[L]]!=0){
+                ans--;
+                //printf("Subtracted");
+            }
+            //printf("\n");
+            F[V[L]]++;
+        }
+        while(L<QL[i].l){
+            F[V[L]]--;
+            //printf("L at %i and has %i ", L, F[V[L]]);
+            if(F[V[L]]%2==1){
+                ans--;
+                //printf("Subtracted");
+            }else if (F[V[L]]!=0){
+                //printf("Added");
+                ans++;
+            }
+            //printf("\n");
+            L++;
+        }
+        QL[i].val = ans;
+        //printf("Putting ans %i \n", ans);
+
+    }
+    sort(QL, QL+Qs, &reord);
+    for(int i = 0 ; i < Qs; i ++){
+        printf("%i\n",QL[i].val);
+    }
+}

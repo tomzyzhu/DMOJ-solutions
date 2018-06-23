@@ -1,0 +1,49 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class Unlucky {
+	public static int [] tree;
+	public static int size;
+	public static void update(int index, int value) {
+		index++;
+		while(index<=size) {
+			tree[index-1]+=value;
+			index+= (index&-index);
+		}
+	}
+	public static int query (int index) {
+		index++;
+		int sum = 0;
+		while(index>0) {
+			sum += tree[index-1];
+			index-=(index&-index);
+		}
+		return sum;
+	}
+	public static void main(String[] args) {
+		
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		
+		try {
+			int n = Integer.parseInt(in.readLine());
+			size= 1000000;
+			tree = new int[1000000];
+			
+			String [] tokens = in.readLine().split(" ");
+			for(int i = 0 ; i < n ; i ++) {
+				update(Integer.parseInt(tokens[i])-1,1);
+			}
+			
+			n = Integer.parseInt(in.readLine());
+			
+			for(int i = 0 ; i < n ; i ++) {
+				int temp  = Integer.parseInt(in.readLine());
+				System.out.println(temp - query(temp-1));
+			}
+			
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+}

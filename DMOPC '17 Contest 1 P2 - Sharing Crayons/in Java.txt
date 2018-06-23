@@ -1,0 +1,45 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
+public class Crayons3 {
+
+	public static void main(String[] args) {
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+
+		try {
+
+			String []tokens = in.readLine().split(" ");
+			
+
+
+			int n = Integer.parseInt(tokens[0]);
+			int m = Integer.parseInt(tokens[1]);
+			HashMap<Integer,Integer> map = new HashMap<Integer,Integer>();
+			map.put(0, 1);
+			
+
+			tokens = in.readLine().split(" ");
+			int counter = 0;
+			long ans = 0;
+			for(int i = 0 ; i < n ; i ++) {
+				counter =(counter + Integer.parseInt(tokens[i]))%m;
+				
+				if(map.get(counter)==null) {
+					map.put(counter, 1);
+				}else {
+					ans = ans + Long.parseLong(String.valueOf(map.get(counter)));
+					map.put(counter, map.get(counter)+1);
+				}
+			}
+			System.out.println(ans);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+}

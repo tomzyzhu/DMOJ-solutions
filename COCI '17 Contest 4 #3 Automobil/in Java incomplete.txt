@@ -1,0 +1,65 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class garbo123123 {
+
+	public static long[][] store = new long[1000][1000];
+	public static void main(String[] args) {
+		
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		
+		try {
+			
+			String [] t = in.readLine().split(" ");
+			int n = Integer.parseInt(t[0]);
+			int m = Integer.parseInt(t[1]);
+			int k = Integer.parseInt(t[2]);
+			
+			for(int l = 0 ; l < n ; l ++) {
+				for(int j = 0 ; j < m ; j ++) {
+					store[l][j] = m*l+ j + 1;
+					//System.out.println("store " +  l + " " + j + " " + store[l][j]);
+				}	
+			}
+			for(int i= 0 ; i < k; i ++) {
+				//System.out.println();
+				t = in.readLine().split(" ");
+				if(t[0].equals("R")) {
+					
+					for(int i2 = 0 ; i2< m; i2++) {
+						store[Integer.parseInt(t[1])-1][i2] = (store[Integer.parseInt(t[1])-1][i2] * Integer.parseInt(t[2])) %1000000007;
+					}
+//					for(int l = 0 ; l < n ; l ++) {
+//						for(int j = 0 ; j < m ; j ++) {
+//							System.out.println("store " +  l + " " + j + " " + store[l][j]);
+//						}	
+//					}
+				}else {
+					for(int i2 = 0 ; i2< n; i2++) {
+						store[i2][Integer.parseInt(t[1])-1] = (store[i2][Integer.parseInt(t[1])-1]  * Integer.parseInt(t[2])) %1000000007;
+					}
+//					for(int l = 0 ; l < n ; l ++) {
+//						for(int j = 0 ; j < m ; j ++) {
+//	
+//							System.out.println("store " +  l + " " + j + " " + store[l][j]);
+//						}	
+//					}
+				}
+			}
+			
+			long ans = 0;
+			
+			for(int i = 0 ; i < n ; i ++) {
+				for(int i2 = 0 ; i2 < m ; i2 ++) {
+					ans += store[i][i2];
+					ans = ans %1000000007;
+					
+				}	
+			}
+			System.out.println(ans);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+}

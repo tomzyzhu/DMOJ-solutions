@@ -1,0 +1,31 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class pi {
+	
+	static int [][] dp = new int [300][300];
+	
+	public static int dp(int n, int k) {
+		System.out.println(n +   + k);
+		if (kn)
+			return 0;
+		if(k==1)
+			return 1;
+		if(dp[n][k]==0)
+			dp[n][k] = dp(n-1,k-1)+dp(n-k,k);
+		return dp[n][k];
+	}
+	
+	public static void main(String[] args) {
+		BufferedReader in = new BufferedReader (new InputStreamReader (System.in));
+		
+		try {
+			
+			int n = Integer.parseInt(in.readLine());
+			int k = Integer.parseInt(in.readLine());
+			System.out.println(dp(n,k));
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+}

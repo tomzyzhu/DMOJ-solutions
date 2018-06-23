@@ -1,0 +1,36 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class mara {
+	public static int [] info = new int [1000000];
+	public static int n;
+	public static int q;
+	public static void main(String[] args) {
+		BufferedReader in = new BufferedReader (new InputStreamReader(System.in));
+		try {
+			String t[];
+			n = Integer.parseInt(in.readLine());
+			for(int i = 0 ; i  n ; i ++) {
+				t = in.readLine().split( );
+				if(i!=0) {
+					info [i] = info[i-1] + Integer.parseInt(t[0]);
+				}else {
+					info[0] = Integer.parseInt(t[0]);
+				}
+			}
+			q = Integer.parseInt(in.readLine());
+			for(int i = 0 ; i  q ; i ++) {
+				t = in.readLine().split( );
+				int a = Integer.parseInt(t[0]);
+				int b = Integer.parseInt(t[1]);
+				if(a == 0) {
+					System.out.println(info[b]);
+				}else {
+					System.out.println(info[b] - info[a-1]);
+				}
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+}

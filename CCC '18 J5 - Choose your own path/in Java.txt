@@ -1,0 +1,75 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+
+public class adsfasdfasdfasdf {
+		public static N2 [] store = new N2 [0];
+	public static void main(String[] args) {
+
+		try {
+
+			BufferedReader in = new BufferedReader (new InputStreamReader(System.in));
+
+			int n = Integer.parseInt(in.readLine());
+			store= new N2[n];
+			
+			for(int i = 0; i < n ;i ++) {
+				store[i] = new N2();
+			}
+			for(int i = 0 ;i < n ;i ++) {
+
+
+				String [] t = in.readLine().split(" ");
+//				System.out.println(Arrays.toString(t));
+				if(Integer.parseInt(t[0])!=0)
+					for(int i2 = 0 ; i2< Integer.parseInt(t[0]);i2++) {
+//						System.out.println(Integer.parseInt(t[i2+1])-1);
+						store[i].children.add(store[Integer.parseInt(t[i2+1])-1]);
+					}
+			}
+			
+			store[0].DFS(1);
+
+			
+			if(N2.checkOk(store)) 
+				System.out.println("Y") ;
+			else
+				System.out.println("N");
+			
+			System.out.println(N2.lowd);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+}
+
+class N2{
+	public ArrayList<N2> children = new ArrayList<N2>();
+	public static int lowd = Integer.MAX_VALUE;
+	public int myd = Integer.MAX_VALUE;
+	public void DFS(int d) {
+		if(d>myd) {
+			return;
+		}else {
+			myd = d;
+		}
+		if(children.size()!=0)
+			for(N2 c: children) {
+				c.DFS(d+1);
+			}
+		else
+			lowd = Math.min(lowd, d);
+	}
+	
+	public static boolean checkOk (N2 [] a) {
+		for(N2 n:a) {
+			if(n.myd ==Integer.MAX_VALUE)
+				return false;
+		}
+		return true;
+	}
+
+}

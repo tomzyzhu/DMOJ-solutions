@@ -1,0 +1,47 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class Smart {
+	public static int [] a;
+	public static void main(String[] args) {
+		BufferedReader in = new BufferedReader (new InputStreamReader (System.in));
+		try {
+			String t;
+			for(int o = 0 ; o < 10 ; o ++) {
+				a = new int [8];
+				t = in.readLine();
+				while(!t.equals("end of box")) {
+					//System.out.println("here");
+					if(t.equals("orange")) {
+						a[0]++;
+					}if(t.equals("blue")) {
+						a[1]++;
+					}if(t.equals("green")) {
+						a[2]++;
+					}if(t.equals("yellow")) {
+						a[3]++;
+					}if(t.equals("pink")) {
+						a[4]++;
+					}if(t.equals("violet")) {
+						a[5]++;
+					}if(t.equals("brown")) {
+						a[6]++;
+					}if(t.equals("red")) {
+						a[7]++;
+					}
+					t = in.readLine();
+				}
+				int ans = 0;
+				for(int i = 0 ; i < 7; i ++) {
+					ans+= (int)(Math.ceil((double)(a[i])/7));
+				}
+				ans*= 13;
+				ans+= 16*a[7];
+				System.out.println(ans);
+			}
+		}catch(Exception e) { 
+
+			e.printStackTrace(); 
+		}
+	}
+}

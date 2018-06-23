@@ -1,0 +1,96 @@
+#include <bits/stdc++.h>
+
+/* run this program using the console pauser or add your own getch, system("pause") or input loop */
+
+using namespace std;
+set<int> ps[30000];
+int lowest [30000];
+int n,m, start, ending;
+
+void bfs(){
+	lowest[start] = 0;
+	queue<int> q;
+	queue<int> t;
+	q.push(start);
+	t.push(0);
+	while(!q.empty()){
+		int current = q.front(); //node you're on
+		int currentt = t.front(); //time you're at
+		//printf("bfs %i %i \n", current, currentt);
+		q.pop();
+		t.pop();
+
+        set<int>::iterator it;
+		//for loops selects power
+		for (it = ps[current].begin(); it != ps[current].end(); ++it){
+
+			int power = *it;
+			//printf("power %i \n" , power);
+
+			//for loop decides to go or not
+			if(current+power<n && ps[current+power].find(power) != ps[current+power].end()&&lowest[current+power]>currentt+1){
+				lowest[current+power] = currentt+1;
+				q.push(current+power);
+				t.push(currentt+1);
+			}
+			//printf("%d\n", ps[current+1*power].find(power) != ps[current+1*power].end());
+			for(int i2 = 1; current+i2*power<n && ps[current+i2*power].find(power) == ps[current+i2*power].end(); i2++){
+				if(currentt+i2<lowest[current+i2*power]){
+					lowest[current+i2*power] = currentt+i2;
+					q.push(current+i2*power);
+					t.push(currentt+i2);
+				}if(current+(i2+1)*power<n && ps[current+(i2+1)*power].find(power) != ps[current+(i2+1)*power].end()&&lowest[current+(i2+1)*power] > currentt+i2+1){
+					lowest[current+(i2+1)*power] = currentt+i2+1;
+					q.push(current+(i2+1)*power);
+					t.push(currentt+i2+1);
+				}
+			}
+			if(current-power>=0 && ps[current-power].find(power) != ps[current-power].end()&&lowest[current-power]>currentt+1){
+				lowest[current-power] = currentt+1;
+				q.push(current-power);
+				t.push(currentt+1);
+			}
+			for(int i2 = -1; current+i2*power>=0 && ps[current+i2*power].find(power) == ps[current+i2*power].end(); i2--){
+				if(currentt-i2<lowest[current+i2*power]){
+					lowest[current+i2*power] = currentt-i2;
+					q.push(current+i2*power);
+					t.push(currentt-i2);
+				}if(current+(i2-1)*power>=0 && ps[current+(i2-1)*power].find(power) != ps[current+(i2-1)*power].end()&&lowest[current+(i2-1)*power] > currentt-i2+1){
+					lowest[current+(i2-1)*power] = currentt-i2+1;
+					q.push(current+(i2-1)*power);
+					t.push(currentt-i2+1);
+				}
+			}
+		}
+	}
+}
+int main() {
+
+	scanf("%i%i", &n,&m);
+	for(int i = 0 ; i < n ; i ++){
+		lowest[i] = INT_MAX;
+		//printf("%i \n", lowest[i]);
+	}
+	for(int i = 0 ; i < m ; i ++){
+		int a,b;
+
+		scanf("%i%i", &a,&b);
+		if(i ==0){
+			start = a;
+		}else if (i ==1){
+			ending = a;
+		}
+		ps[a].insert(b);
+	}
+	bfs();
+
+	//for(int i = 0 ; i < n ; i ++){
+
+		//printf("%i \n", lowest[i]);
+	//}
+    if(lowest[ending] != INT_MAX)
+    printf("%i", lowest[ending]);
+    else{
+        printf("-1");
+    }
+}

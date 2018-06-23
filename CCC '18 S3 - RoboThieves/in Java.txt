@@ -1,0 +1,185 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+
+public class Main {
+	public static int r ;
+	public static int c ;
+	public static int sx;
+	public static int sy;
+	public static spot [] [] info = new spot [100][100];
+
+	public static void okCheck(){
+		for(int i = 0 ; i < r ; i ++){
+			for(int i2 = 0 ; i2 < c ; i2 ++){
+				//L,R,U,D,C,W,S,.
+				
+				if(info[i][i2].type == 'W')
+					info[i][i2].ok=false;
+				else if (info[i][i2].type == 'C'){
+					int currentx = i;
+					int currenty = i2;
+					while(info[currentx][currenty].type!='W'){
+						if(info[currentx][currenty].type!= 'L'&& info[currentx][currenty].type!= 'R'&& info[currentx][currenty].type!= 'U'&& info[currentx][currenty].type!= 'D')
+							info[currentx][currenty].ok=false;
+						currentx++;
+					}
+					currentx = i;
+					currenty = i2;
+					while(info[currentx][currenty].type!='W'){
+						if(info[currentx][currenty].type!= 'L'&& info[currentx][currenty].type!= 'R'&& info[currentx][currenty].type!= 'U'&& info[currentx][currenty].type!= 'D')
+							info[currentx][currenty].ok=false;
+						currentx--;
+					}
+					currentx = i;
+					currenty = i2;
+					while(info[currentx][currenty].type!='W'){
+						if(info[currentx][currenty].type!= 'L'&& info[currentx][currenty].type!= 'R'&& info[currentx][currenty].type!= 'U'&& info[currentx][currenty].type!= 'D')
+							info[currentx][currenty].ok=false;
+						currenty++;
+					}
+					currentx = i;
+					currenty = i2;
+					while(info[currentx][currenty].type!='W'){
+						if(info[currentx][currenty].type!= 'L'&& info[currentx][currenty].type!= 'R'&& info[currentx][currenty].type!= 'U'&& info[currentx][currenty].type!= 'D')
+							info[currentx][currenty].ok=false;
+						currenty--;
+					}
+					
+				}
+			}
+		}
+	}
+	
+	public static void walk (int x, int y, int distance){
+		//System.out.println("walking at " + x + " " + y + " at " + distance + " with type "+ info[x][y].type);
+		if(distance>=info[x][y].minDis ){
+			return;
+		}if(!info[x][y].ok){
+			return;
+		}
+		
+		info[x][y].minDis = distance;
+		
+		if(info[x][y].type=='L'){
+			
+			walk(x,y-1,distance);
+			return;
+			
+		}if(info[x][y].type=='R'){
+			
+			walk(x,y+1,distance);
+			return;
+			
+		}if(info[x][y].type=='U'){
+			
+			walk(x-1,y,distance);
+			return;
+			
+		}if(info[x][y].type=='D'){
+			
+			walk(x+1,y,distance);
+			return;
+		}
+		
+		if(info[x][y+1].ok){
+			
+			walk(x,y+1,distance+1);
+			
+		}if(info[x+1][y].ok){
+			
+			walk(x+1,y,distance+1);
+			
+		}if(info[x][y-1].ok){
+			
+			walk(x,y-1,distance+1);
+			
+		}if(info[x-1][y].ok){
+			
+			walk(x-1,y,distance+1);
+			
+		}
+	}
+	public static void main(String[] args) {
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+
+		try{
+			String [] t = in.readLine().split(" ");
+			r = Integer.parseInt(t[0]);
+			c = Integer.parseInt(t[1]);
+			for(int i = 0 ; i < r ; i ++){
+				for(int i2 = 0 ; i2 < c ; i2 ++){
+					info[i][i2] = new spot();
+						
+				}
+				
+			}
+			for(int i = 0 ; i < r ; i ++){
+				t = in.readLine().split(" ");
+				for(int i2 = 0 ; i2 < c ; i2 ++){
+					//L,R,U,D,C,W,S,.
+					info[i][i2].type = t[0].charAt(i2);
+					if(t[0].charAt(i2)=='S'){
+						sx = i;
+						sy = i2;
+					}
+						
+				}
+				
+			}
+			okCheck();
+			walk(sx, sy, 0);
+//			for(int i = 0 ; i < r ; i ++){
+//				for(int i2 = 0 ; i2 < c ; i2 ++){
+//					//L,R,U,D,C,W,S,.
+//					System.out.print(info[i][i2].type);
+//						
+//				}
+//				System.out.println();
+//				
+//			}
+//			System.out.println();
+//			
+//			for(int i = 0 ; i < r ; i ++){
+//				for(int i2 = 0 ; i2 < c ; i2 ++){
+//					//L,R,U,D,C,W,S,.
+//					if(info[i][i2].ok)
+//					System.out.print('.');
+//					else{
+//						System.out.print('F');
+//					}
+//						
+//				}
+//				System.out.println();
+//				
+//			}
+//			System.out.println();
+			for(int i = 0 ; i < r ; i ++){
+				for(int i2 = 0 ; i2 < c ; i2 ++){
+					if(info[i][i2].type=='.'){
+						if(info[i][i2].minDis!=Long.MAX_VALUE)
+						System.out.println(info[i][i2].minDis);
+						else{
+							System.out.println("-1");
+						}
+					}
+						
+				}
+				
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
+	}
+}
+
+class spot{
+	public char type; //L,R,U,D,C,W,S,.
+
+	public boolean ok = true; // true if robot can walk on it 
+	// false if camera can see or wall 
+
+	public long minDis = Long.MAX_VALUE; //how far it takes to get here
+
+}

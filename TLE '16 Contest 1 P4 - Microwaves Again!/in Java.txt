@@ -1,0 +1,121 @@
+import java.util.Scanner;
+
+public class q4 {
+	public static boolean[] Combine (boolean [] [] inputChart, int room1, int room2, int room3, int roomMax){
+		boolean [] output = new boolean [roomMax];
+		for (int index8 = 0; index8<roomMax; index8++){ 
+			if (inputChart[room1][index8]== true||inputChart[room2][index8]== true||inputChart[room3][index8]== true) output[index8]=true;
+			else output[index8]=false;
+		}
+		return output;
+	}
+	public static int AdditionHighest3 (int a, int b, int c, int d){
+		if (a<b&&a<c&&a<d){
+			return b+c+d;
+		}else if (b<a&&b<c&&b<d){
+			return a+c+d;
+		}else if (c<a&&c<d&&c<d){
+			return a+b+d;
+		}
+		else{
+			return a+b+c;
+		}
+	}
+	public static void main (String[]args){
+		Scanner input = new Scanner(System.in);
+
+		int numRoom = input.nextInt();
+		int [] numMicro = new int [numRoom];
+		int numHalls = input.nextInt();
+		int numExplodeDis = input.nextInt();
+
+		for(int index = 0; index< numRoom; index++){ //get room initialization info
+			numMicro[index] = input.nextInt();
+		}
+		int tempRoom1;
+		int tempRoom2;
+		int tempDistance;
+
+		int [] [] roomConnect = new int [numRoom] [numRoom]; 
+		for (int index = 0; index<numRoom; index++){
+			for (int index1 = 0; index1 <numRoom; index1++){
+				roomConnect[index][index1] = 2147483647 ;
+			}
+		}
+		for (int index = 0; index < numHalls; index++){//Get the hall information
+			tempRoom1 = input.nextInt()-1;
+			tempRoom2 = input.nextInt()-1;
+			tempDistance = input.nextInt();
+			if (roomConnect[tempRoom1] [tempRoom2] > tempDistance){
+				roomConnect[tempRoom1] [tempRoom2] = tempDistance;
+				roomConnect[tempRoom2] [tempRoom1] = tempDistance;
+			}
+		}
+
+		// end inputs here... outputs VVV
+		int maxMicros = 0; //output variable
+		int tempMicros;
+		int []activeMicros = new int [numRoom]; //-1 means explode and check, -2 means have exploded, 0 means micros have not exploded yet
+		int []activeDistance = new int[numRoom];//how much distance is available in the chain\
+		boolean [] [] roomLink = new boolean [numRoom] [numRoom]; //stores the info of if the first exploded room (the first index) has explode a certain room number (index2)
+		for (int index6 = 0; index6<numRoom; index6++){ //reset all values stored in the boolean
+			for (int index7 = 0; index7<numRoom; index7++){
+				roomLink[index6][index7]=false;
+			}
+		}
+
+		boolean explodeDone;
+		int chainCounter; //Counts how many chains have happened in one explosions
+		for (int index = 0; index < numRoom; index++){//Check how many micros I can break with one bomb (ie. check which rooms would be blown up if i blew up one room)
+			for (int index1 = 0; index1<numRoom; index1++)activeMicros[index1]=0;// set all rooms to "havent exploded yet
+			activeMicros[index] = -1; //basically says set the first explosion to the index
+			activeDistance[index]=numExplodeDis; //set first explosions to how far it reaches
+			explodeDone = false;
+			chainCounter = 0;
+			while (explodeDone == false){// check if something is exploding
+				for (int index4 = 0; index4<numRoom; index4++){
+					if (activeMicros[index4] == -1){ //if it is exploding, say that it has exploded and check all halls that it can connect to
+						activeMicros[index4] = -2;
+						for (int index5 =0; index5< numRoom; index5++){// try to chain explosion to room number index 5
+							if (roomConnect[index4][index5]<= activeDistance[index4] && activeMicros[index5] == 0){ // if there is enough distance and the microwaves have not exploded yet, set chained room to explode and decrease the distance by the hall value 
+								//*** VERY IMPORTANT NOTE!!! THE activeMicros[index5] == 0 IS VERY IMPORTANT IN THE LAST LINE!!! it allows the code to stop looping explosions, since if an explosions where to go back to somewhere it already exploded, it would have less blast radius stored up, and so it's useless to calculate it again. also, it probably loops back and forth the same hallway many time, so ya. Somehow, it also makes wrong answers. Just remember THAT PART OF THE CODE IS VERY IMPORTANT*** 
+								activeMicros[index5]= -1;
+								activeDistance[index5] = activeDistance[index4] - roomConnect[index4][index5];
+							}
+						}
+					}
+				}
+				explodeDone = true;
+				for (int index1 = 0; index1< numRoom; index1++){
+					if (activeMicros[index1] == -1){
+						explodeDone = false;
+					}
+				}
+			}
+			for (int index4 = 0; index4<numRoom; index4++){// accumulate all that have exploded
+				if (activeMicros[index4] == -2){
+					roomLink[index][index4]=true;
+				}
+			}
+		}
+		boolean [] tempRoomExplode = new boolean [numRoom]; //stored temporary info about which rooms have been exploded for a certain combination of rooms
+		tempMicros = 0;
+		for (int index9 = 0; index9<numRoom; index9++){ //use 3 counters for 3 combinations
+			for (int index10 = index9+1; index10<numRoom; index10++){
+				for (int index11 = index10+1; index11<numRoom; index11++){
+					tempMicros = 0;
+					tempRoomExplode = Combine(roomLink,index9,index10,index11,numRoom);
+					for (int index12 = 0; index12 <numRoom; index12++){ //sweep array to check for all that have been exploded in the combination
+						if (tempRoomExplode[index12]==true){
+							tempMicros += numMicro[index12]; //if it has been exploded in this combination, add it up
+						}
+					}
+					if (tempMicros>maxMicros){
+						maxMicros = tempMicros;
+					}
+				}
+			}
+		}
+		System.out.println(maxMicros);
+	}
+}

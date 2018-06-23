@@ -1,0 +1,37 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+
+public class junk12312321 {
+	
+	public static void main(String[] args) {
+		
+		BufferedReader in = new BufferedReader (new InputStreamReader(System.in));
+		
+		try {
+			
+			int n = Integer.parseInt(in.readLine());
+			
+			int[] temp = new int[n];
+			for(int i = 0 ; i < n ; i ++) {
+				temp[i] = Integer.parseInt(in.readLine());
+			}
+			Arrays.sort(temp);
+			
+			double [] t = new double[n-1];
+			for(int i = 0 ; i < n-1 ; i++) {
+				t[i] = (double) (temp[i+1] + temp[i])/2.0;
+			}
+			double min = Integer.MAX_VALUE;
+			
+			for(int i = 1 ; i < n-1 ; i ++) {
+				min = Math.min(min, t[i]-t[i-1]);
+				//System.out.println(max);
+			}
+			
+			System.out.println(String.format("%.1f", min));
+		}catch(Exception e ) {
+			e.printStackTrace();
+		}
+	}
+}

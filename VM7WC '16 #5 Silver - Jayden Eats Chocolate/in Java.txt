@@ -1,0 +1,36 @@
+import java.io.*;
+import java.util.Arrays;
+
+public class JaydenEatsChocolate {
+
+	private static int gap;
+
+	public static void main(String[] args) throws NumberFormatException, IOException {
+
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+
+		int[] bar = new int[Integer.parseInt(in.readLine())+1];
+		String[] tokens = in.readLine().split(" ");
+
+		Arrays.fill(bar, -1);
+		bar[0] = 0;
+
+		for (int i = 0; i < tokens.length; i++) {
+
+			gap = Integer.parseInt(tokens[i]);
+
+			for (int index = 0; index < bar.length; index++)  {
+
+				if (bar[index] != -1 && index + gap <= bar.length-1 && bar[index] + 1 > bar[index + gap])
+
+					bar[index + gap] = bar[index] + 1;
+
+			}
+
+		}
+
+		System.out.println(bar[bar.length-1]);
+		
+	}
+	
+}

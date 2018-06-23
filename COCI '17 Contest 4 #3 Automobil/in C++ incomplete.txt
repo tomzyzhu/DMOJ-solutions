@@ -1,0 +1,51 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int n,m,k;
+long long store [1000][1000];
+
+int main()
+{
+    scanf("%i%i%i", &n, &m, &k);
+
+    //printf("n %i m %i k %i \n", n,m,k);
+    for(int i = 0 ; i < n; i ++){
+        for(int i2 = 0 ; i2< m; i2 ++){
+            store[i][i2] = i*m+i2+1;
+            //printf("info %i %i %i\n", i, i2, store[i][i2]);
+        }
+    }
+    for(int i = 0 ; i < k ; i ++){
+        char t;
+        int v, w;
+        scanf(" %c%i%i", &t, &w, &v);
+        //printf("%c %i %i \n", t, w ,v);
+        w--;
+        if(t == 'R'){
+                //printf("row\n");
+            for(int i2 = 0 ; i2 < m; i2 ++){
+                store[w][i2] = (store[w][i2] *v) % 1000000007;
+            }
+        }else{
+            for(int i2 = 0 ; i2 < n; i2 ++){
+                store[i2][w] = (store[i2][w] *v) % 1000000007;
+            }
+        }
+        //printf("i %i \n", i);
+        //for(int i = 0 ; i < n; i ++){
+        //for(int i2 = 0 ; i2< m; i2 ++){
+        //    printf("info %i %i %i\n", i, i2, store[i][i2]);
+        //}
+    //}
+    }
+
+    long long ans = 0;
+    for(int i = 0 ; i < n; i ++){
+        for(int i2 = 0 ; i2< m; i2 ++){
+            ans += store[i][i2];
+            ans = ans% 1000000007;
+        }
+    }
+    printf("%lld", ans);
+}

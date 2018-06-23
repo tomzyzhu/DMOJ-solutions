@@ -1,0 +1,98 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+
+public class School2 {
+	
+	public static final int size = 120020;
+	public static long [][]st = new long[size][(int)(Math.log(size)/Math.log(2))];
+	public static int n;
+	public static int currenti = 0;
+
+	public static Node2 [] node;
+	
+	public static void dfs (int current, int previous, long distance) {
+		if(node[current].distance == -1) {
+			node[current].distance=distance;
+			node[current].dfsnum = currenti;
+			st[currenti][0] =distance;
+			currenti++;
+		}
+		int size = node[current].c.size();
+		for(int i = 0 ; i<size; i ++) {
+			if(node[current].c.get(i)!=previous) {
+				dfs(node[current].c.get(i),current,distance+node[current].d.get(i));
+				st[currenti][0] = distance;
+				currenti++;
+			}
+		}
+		//System.out.println(current + " " + distance);
+		n = currenti;
+	}
+
+	public static void build(){
+		for(int currentk = 1; (int)Math.pow(2, currentk)-1<n; currentk++){
+			for(int i = 0 ; i+(int)Math.pow(2, currentk)-1<n; i ++){
+				//System.out.println(st[i][currentk-1] + " " + st[i+(int)(Math.pow(2,currentk-1))][currentk-1]);
+				st[i][currentk] = Math.min(st[i][currentk-1], st[i+(int)(Math.pow(2,currentk-1))][currentk-1]);
+			}
+		}
+	}
+	
+	public static long min(int l, int r) {
+		int len = r-l+1;
+		int k = (int)(Math.log(len)/Math.log(2));
+		return Math.min(st[l][k], st[r-(int)(Math.pow(2, k))+1][k]);
+	}
+	public static void main(String[] args) {
+		BufferedReader in = new BufferedReader (new InputStreamReader(System.in));
+		
+		try {
+			
+			n = Integer.parseInt(in.readLine());
+			node =new Node2[n];
+			for(int i = 0 ; i < n ; i ++) {
+				node[i] = new Node2();
+			}
+			st = new long[2*n+1][(int)(Math.log(2*n+1)/Math.log(2))+1];
+			
+			String[]t;
+			for(int i = 0 ; i < n-1 ; i ++) {
+				t = in.readLine().split(" ");
+				int n1 = Integer.parseInt(t[0]);
+				int n2 = Integer.parseInt(t[1]);
+				int d = Integer.parseInt(t[2]);
+				
+				node[n1].c.add(n2);
+				node[n1].d.add((long) d);
+				
+				node[n2].c.add(n1);
+				node[n2].d.add((long) d);
+			}
+			dfs(0,-1,0);
+			build();
+			int q = Integer.parseInt(in.readLine());
+			for(int i = 0 ; i < q; i ++) {
+				t = in.readLine().split(" ");
+				int l = node[Integer.parseInt(t[0])].dfsnum;
+				int r = node[Integer.parseInt(t[1])].dfsnum;
+				if(l>r) {
+					int temp = l;
+					l = r;
+					r = temp;
+				}
+				long lca = min(l, r);
+				System.out.println(node[Integer.parseInt(t[0])].distance+node[Integer.parseInt(t[1])].distance-(2*lca));
+			}
+		}catch(Exception e) {
+			
+		}
+	}
+}
+
+class Node2{
+	public ArrayList<Integer> c = new ArrayList<Integer>();
+	public ArrayList<Long> d = new ArrayList<Long>();
+	public int dfsnum;
+	public long distance=-1;
+}

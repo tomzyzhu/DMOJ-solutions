@@ -1,0 +1,34 @@
+import java.util.Scanner;
+import static java.lang.Math.toIntExact;
+
+public class q5 {
+	public static void main (String[]args){
+		Scanner input = new Scanner (System.in);
+		
+		int numPlanets = input.nextInt();
+		long [][] planetInfo = new long [numPlanets-1] [3]; // 0 for planet destination, 1 for distance to next planet, 2 for fuel cost
+		
+		for (int index = 0; index < numPlanets-1; index++){
+			planetInfo [index][0] = input.nextInt()-1;
+			planetInfo [index][1] = input.nextInt();
+			planetInfo [index][2] = input.nextInt();
+		}
+		
+		int tempPlanet;
+		long tempCheapestfuel;
+		long [] fuelOutput = new long [numPlanets -1];
+		for (int index = 0 ; index< numPlanets - 1; index++) fuelOutput[index] = 0;
+		for (int index = 0; index <numPlanets - 1; index++){// this is counter for check of individual planets
+			tempPlanet = index;
+			tempCheapestfuel = planetInfo[tempPlanet][2];
+			while (tempPlanet != numPlanets-1){
+				if (planetInfo [tempPlanet][2]< tempCheapestfuel){
+					tempCheapestfuel = planetInfo [tempPlanet] [2];
+				}
+				fuelOutput [index] += planetInfo [tempPlanet][1] * tempCheapestfuel ;
+				tempPlanet = toIntExact(planetInfo [tempPlanet][0]);
+			}
+		}
+		for (int index = 0 ; index< numPlanets - 1; index++) System.out.println(fuelOutput[index]);
+	}
+}

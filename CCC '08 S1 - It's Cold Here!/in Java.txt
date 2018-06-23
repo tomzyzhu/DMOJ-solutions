@@ -1,0 +1,27 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class Cold {
+	public static void main(String[] args) {
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+
+		try {
+			String name = "";
+			int temp = 0;
+			int low = Integer.MAX_VALUE;
+			String lown = "";
+			while(!name.equals("Waterloo")) {
+				String[] t = in.readLine().split(" ");
+				name = t[0];
+				temp = Integer.parseInt(t[1]);
+				if( temp<low) {
+					low = temp;
+					lown = name;
+				}
+			}
+			System.out.println(lown);
+		}catch(Exception e) {
+			
+		}
+	}
+}

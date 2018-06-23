@@ -1,0 +1,77 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+long long n, k;
+long long info [3000001];
+long long l [3000001];
+long long r [3000001];
+
+int main()
+{
+    scanf("%lld %lld" , &n, &k);
+
+    deque <long long> maxq;
+    deque <long long> minq;
+
+    long long left = 0;
+    long long ans = 0;
+    for(long long i = 0 ; i < n ; i ++){
+        scanf("%lld" , &info[i]);
+        //printf("%lld\n", info[i]);
+            while(maxq.size()>0 &&maxq.back()<info[i]){
+                maxq.pop_back();
+            }
+
+        maxq.push_back(info[i]);
+
+            while(minq.size()>0 &&minq.back()>info[i]){
+                minq.pop_back();
+            }
+        minq.push_back(info[i]);
+
+        //printf("maxq %lld minq %lld infoi %lld\n" , maxq.back(), minq.front(), info[i]);
+        while(maxq.front()-minq.front()>k){
+            //printf("compare %lld %lld\n", maxq.front(), minq.front());
+
+            r[left] = i-left;
+            ans+= i-left;
+            long long temp = info[left];
+            left++;
+            if(maxq.front() == temp)
+                maxq.pop_front();
+            //for(long long i2 = 0 ; i2 <maxq.size();i2++){
+            //    if(maxq.at(i2)==temp){
+            //        //printf("maxq %lld\n" , maxq.at(i2));
+            //        maxq.erase(maxq.begin()+i2);
+            //        break;
+            //    }
+            //}
+            if(minq.front() == temp)
+                minq.pop_front();
+            //for(long long i2 = 0 ; i2 <minq.size();i2++){
+            //    if(minq.at(i2)==temp){
+                    //printf("minq %lld\n" , minq.at(i2));
+            //        minq.erase(minq.begin()+i2);
+            //        break;
+            //    }
+            //}
+        }
+        //printf("compare %lld %lld\n", maxq.front(), minq.front());
+
+        l[i] = i-left+1;
+    }
+    for(; left<n; left++){
+        r[left] =n-left;
+        ans+= n-left;
+    }
+    printf("%lld",ans);
+//    for(long long i = 0 ; i < n ; i ++){
+//        printf("%lld ", l[i]);
+//    }
+//    printf("\n");
+//    for(long long i = 0 ; i < n ; i ++){
+//        printf("%lld ", r[i]);
+//    }
+
+}

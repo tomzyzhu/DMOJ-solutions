@@ -1,0 +1,48 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class Fib {
+	public static void main(String[] args) {
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+
+		try {
+			
+			int n = Integer.parseInt(in.readLine());
+			String s = in.readLine();
+			
+			int last = 1;
+			int current = 1;
+			for(int i = 0 ; i < n; i ++) {
+				
+				if(i == current -1) {
+					if(s.charAt(i)=='A') {
+						int temp = current;
+						current+=last;
+						last = temp;
+					}else {
+						System.out.println("Bruno, GO TO SLEEP");
+						System.exit(0);
+					}
+				}else if(s.charAt(i)=='A') {
+					
+					System.out.println("Bruno, GO TO SLEEP");
+					System.exit(0);
+				}
+				
+//				if(s.charAt(current-1-counter)!='A') {
+//					System.out.println("Bruno, GO TO SLEEP");
+//					System.exit(0);
+//				}
+//				else {
+//					int temp = current;
+//					current+=last;
+//					last = temp;
+//				}
+			}
+			
+			System.out.println("That's quite the observation!");
+		}catch(Exception e) {
+			
+		}
+	}
+}

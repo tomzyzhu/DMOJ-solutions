@@ -1,0 +1,95 @@
+#include<stdio.h>
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<climits>
+
+using namespace std;
+struct island;
+
+struct route {
+	int dest,time, damage;
+	route(int d, int t, int a){
+		dest = d;
+		time = t;
+		damage = a;
+	}
+};
+
+struct island{
+	int lT;
+	int lD;
+	vector<route> paths;
+	
+	island(){
+		lT = 1000000000;
+		lD = 1000000000;
+	}
+	
+};
+
+int maxHP;
+int islands;
+int routes;
+
+island island[2000]; 
+
+void DFS(int current, int time, int damage){
+	int size = island[current].paths.size();
+	for(int i = 0 ; i < size;i++){
+		route r = island[current].paths[i];
+		if(maxHP>damage+r.damage){
+			bool yes = false;
+			if(damage+r.damage<island[r.dest].lD) {
+				island[r.dest].lD=r.damage+damage;
+				yes = true;
+			}if(time+r.time<island[r.dest].lT){
+				island[r.dest].lT=time+r.time;
+				yes = true;
+			}
+			if(yes) {
+//				printf("%i %i %i %i \n", current, r.dest, time+r.time, damage+r.damage);
+				DFS(r.dest, time+r.time, damage+r.damage);
+			}
+		}
+	}
+}
+
+void start(int index){
+	island[index].lD = 0;
+	island[index].lT = 0;
+	DFS(index,0,0);
+}
+int main(){
+	scanf("%i%i%i", &maxHP, &islands, &routes);
+	
+	for(int i = 0 ; i < routes ; i++){
+		int a, b, time, damage;
+		scanf("%i%i%i%i", &a, &b, &time, &damage);
+		a--;
+		b--;
+		island[a].paths.push_back(route(b, time, damage));
+		island[b].paths.push_back(route(a, time, damage));
+	}
+//	printf("\n");
+//	for(int i = 0 ; i < islands ; i++){
+//		int size = island[i].paths.size();
+//		
+//		for(int i2 = 0 ; i2 < size;i2++){
+//			route r=island[i].paths[i2];
+//			printf("%i %i %i %i \n", i,r.dest, r.time,r.damage);
+//		}
+//	}
+//	printf("\n");
+	int h, t; 
+	scanf("%i%i", &h, &t);
+	h--;
+	t--;
+	start(h);
+	if(island[t].lT == 1000000000){
+		printf("-1\n");
+	}else {
+		printf("%i", island[t].lT);
+	}
+	
+}

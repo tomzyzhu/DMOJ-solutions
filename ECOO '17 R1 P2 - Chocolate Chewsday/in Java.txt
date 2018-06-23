@@ -1,0 +1,71 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.Comparator;
+
+public class Chocolate2 {
+	public static Choc [] c = new Choc [100];
+	public static void main(String[] args) {
+		
+		BufferedReader in = new BufferedReader (new InputStreamReader (System.in));
+
+		for(int i = 0 ; i < 100 ; i++) 
+		c[i]= new Choc();
+		try {
+			for(int o = 0 ; o < 10 ; o ++) {
+				int n = Integer.parseInt(in.readLine());
+				String [] t = in.readLine().split(" ");
+				for(int i = 0 ; i < n ; i++) {
+					c[i].name = t[0];
+					t = in.readLine().split(" ");
+					c[i].P=0;
+					c[i].F=0;
+					c[i].G=0;
+						//System.out.println(" ya ");
+					while(t[0].equals("J")) {
+						
+						c[i].P+=Integer.parseInt(t[1]);
+						c[i].F+=Integer.parseInt(t[2]);
+						c[i].G+=Integer.parseInt(t[3]);
+						t = in.readLine().split(" ");
+					}
+				}
+				Arrays.sort(c,0,n,new Comparator<Choc> () {
+
+					@Override
+					public int compare(Choc c1, Choc c2) {
+						// TODO Auto-generated method stub
+						if(c2.G + c2.F + c2.P != c1.G + c1.F + c1.P)
+							return c2.G + c2.F + c2.P-( c1.G + c1.F + c1.P);
+						if(c2.G != c1.G) {
+							return c2.G-c1.G;
+						}if(c2.F != c1.F) {
+							return c2.F-c1.F;
+						}if(c2.P != c1.P) {
+							return c2.P-c1.P;
+						}
+						return 0;
+					}
+					
+				});
+				int ind = 1;
+				System.out.print(c[0].name);
+				while (c[0].G == c[ind].G && c[0].F == c[ind].F && c[0].P == c[ind].P) {
+					System.out.print("," + c[ind].name);
+					ind++;
+				}
+				System.out.println();
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+}
+
+class Choc{
+	String name;
+	int P;
+	int F;
+	int G;
+	
+}

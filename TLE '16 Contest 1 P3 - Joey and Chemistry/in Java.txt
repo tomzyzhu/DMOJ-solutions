@@ -1,0 +1,149 @@
+import java.util.Scanner;
+
+public class q3 {
+
+	private static int gcd(int a, int b) {
+		int t;
+		while(b != 0){
+			t = a;
+			a = b;
+			b = t%b;
+		}
+		return a;
+	}
+	public static boolean isNumeric(String str)  
+	{  
+		try  
+		{  
+			double d = Double.parseDouble(str);  
+		}  
+		catch(NumberFormatException nfe)  
+		{  
+			return false;  
+		}  
+		return true;  
+	}
+
+	public static void main (String[]args){
+		Scanner input = new Scanner(System.in);
+		String textIn = input.next();
+		int Carbon = 0;
+		int Hydrogen = 0;
+		int Oxygen = 0;
+		int a=1;
+		int b= 1;
+		int c = 1;
+		int d = 1;
+		int collectedSum;
+		int startSub =0;
+		int index=0;
+		int index1;
+		boolean firstNum;
+		int firstNumSub;
+
+		if (isNumeric(textIn.substring(0,1)) == true){
+			index1 = 0;
+			do {
+				index1++;
+			}while (isNumeric(textIn.substring(index1,index1+1)) == true);
+
+			startSub = index1;
+			a = Integer.parseInt(textIn.substring(0,startSub));
+			index = startSub;
+			firstNum = true;
+		}
+		// start substring computations
+		// index is now the substring number of a letter
+		int endSub=0;
+		int intSum;
+
+		while (index < textIn.length()){
+
+			if (index == textIn.length()-1){ // if it is on the last index, it is always going to be a letter
+				char output = textIn.charAt(index);
+				if (output == 'H'){
+					Hydrogen++;
+				}
+				else if (output == 'C'){
+					Carbon++;
+				}
+				else{
+					Oxygen++;
+				}
+				index ++;
+			}
+			else{ //if it is not on the last index, go forward with regular calculations
+				index1 = index+1;
+				if (isNumeric(textIn.substring(index1,index1+1)) == true){
+					while (index1 < textIn.length() && isNumeric(textIn.substring(index1,index1+1)) == true){
+						endSub = index1;
+						index1++;
+					}
+					intSum = Integer.parseInt(textIn.substring(index+1, endSub+1));
+					char output = textIn.charAt(index);
+					if (output == 'H'){
+						Hydrogen+= intSum;
+					}
+					else if (output == 'C'){
+						Carbon+= intSum;
+					}
+					else{
+						Oxygen+= intSum;
+					}
+					index = endSub + 1;
+				}
+				else{
+					char output = textIn.charAt(index);
+					if (output == 'H'){
+						Hydrogen++;
+					}
+					else if (output == 'C'){
+						Carbon++;
+
+					}
+					else{
+						Oxygen++;
+					}
+					index ++;
+				}
+			}
+		}
+		// done getting info from input
+		String compSays ="";
+		if (Carbon == 0 || Hydrogen == 0){
+			compSays = "Impossible";
+		}
+		else{
+			c = a*Carbon;
+			if((Hydrogen *a) % 2 == 1){
+				a*=2;
+				b*=2;
+				c*=2;
+				d*=2;
+			}
+
+			d= (a*Hydrogen)/2;
+			if (a*Oxygen < (c*2) + d){ //if easy condition is ok
+				if (((c*2) + d - (a*Oxygen))%2 == 1){
+					a*=2;
+					b*=2;
+					c*=2;
+					d*=2;
+				}
+				b = (((c*2) + d - (a*Oxygen))/2);
+			}
+			else{
+				compSays = "Impossible";
+			}
+		}
+		if (compSays != "Impossible"){
+			int mostDem = gcd(gcd(gcd(a,b), gcd(b,c)), gcd(gcd(gcd(c,d), gcd(a,d)),gcd(gcd(a,c),gcd(b,d))));
+			a/=mostDem;
+			b/=mostDem;
+			c/=mostDem;
+			d/=mostDem;
+			compSays = a + textIn.substring(startSub, textIn.length()) + " + " + b + "O2 -> " + c + "CO2 + " + d  + "H2O";
+		}
+		System.out.println(compSays);
+	}
+}

@@ -1,0 +1,62 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class Quests {
+	public static long [][] dp;
+	public static void main(String[] args) {
+		
+		try {
+
+			BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+			
+			String [] tokens = in.readLine().split(" ");
+			int n = Integer.parseInt(tokens[0]);
+			int h = Integer.parseInt(tokens[1]);
+			
+			dp = new long [2][h+1];
+			//code below already happens
+//			for(int i = 0 ; i < h  ; i ++) {
+//				dp[0][i] = 0;
+//			}
+			int v1;
+			int w1;
+			int v2;
+			int w2;
+			
+			int activeI = 1;
+			int pastI = 0;
+			
+			for(int i = 1 ; i <= n  ; i ++) {
+				
+				activeI = (i%2);
+				pastI = (activeI+1)%2;
+				tokens = in.readLine().split(" ");
+				
+				v1 = Integer.parseInt(tokens[0]);
+				w1 = Integer.parseInt(tokens[1]);
+				v2 = Integer.parseInt(tokens[2]);
+				w2 = Integer.parseInt(tokens[3]);
+				
+				for(int i2 = w1 ; i2 <=h; i2++) {
+					dp[activeI][i2]=dp[pastI][i2-w1]+v1;
+				}
+				for(int i2 = w1+w2 ; i2 <=h; i2++) {
+					dp[activeI][i2]=Math.max(dp[activeI][i2], dp[activeI][i2-w2]+v2);
+				}
+				for(int i2 = 0 ; i2 <=h; i2++) {
+					dp[activeI][i2]=Math.max(dp[activeI][i2],dp[pastI][i2]);
+				}
+			}
+			
+//			for(int i = 1 ; i <= n  ; i ++) {
+//				for(int i2 = 0 ; i2 <=h; i2++) {
+//					System.out.print(dp[i][i2] + "  ");
+//				}
+//				System.out.println();
+//			}
+			System.out.println(dp[n%2][h]);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+}

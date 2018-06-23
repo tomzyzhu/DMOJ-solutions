@@ -1,0 +1,40 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+
+public class ArrayProb {
+	public static int n;
+	public static int [] info;
+	public static long counter = 0;
+	public static void main(String[] args) {
+		BufferedReader in = new BufferedReader (new InputStreamReader(System.in));
+
+		try {
+			 n = Integer.parseInt(in.readLine());
+			 info = new int [n];
+			 
+			for(int i = 0 ; i < n ; i ++) {
+				info[i] = Integer.parseInt(in.readLine());
+			}
+			Arrays.sort(info);
+			while(info[n-2]!=0) {
+				Arrays.sort(info);
+				////System.out.println(Arrays.toString(info));
+				if(info[n-2]==1) {
+					info[n-2]--;
+					info[n-1]--;
+					counter++;
+				}else {
+					int s = info[n-2]/2;
+					counter+= s;
+					info[n-1]-=s;
+					info[n-2]-=s;
+				}
+				Arrays.sort(info);
+			}
+			System.out.println(counter);
+		}catch(Exception e) {
+			System.out.println(0);
+		}
+	}
+}

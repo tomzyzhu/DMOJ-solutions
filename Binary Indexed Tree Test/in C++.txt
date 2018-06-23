@@ -1,0 +1,87 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+long long tree [100000]; 
+long long size;
+void update(long long index, long long value){
+	index++;
+	while(index<=size){
+		tree[index-1]+=value;
+		index+= (index&-index);
+	}
+}
+ long long query (long long index){
+	index++;
+	 long long sum = 0L;
+		while(index>0){
+			sum = sum + (( long long)tree[index-1]);
+			index-=(index&-index);
+		}
+	return sum;
+};
+
+long long tree2 [100001]; 
+long long size2;
+void update2(long long index, long long value){
+	while(index<=size2){
+		tree2[index]+=value;
+		index+= (index&-index);
+	}
+}
+ long long query2 (long long index){
+	 long long sum = 0L;
+	while(index>0){
+		sum = sum + (( long long) tree2[index]);
+		index-=(index&-index);
+	}
+	return sum;
+};
+
+int main(){
+	long long operations;
+	size2 = 100001;
+	scanf("%llu%llu", &size,&operations);
+	for(long long i = 0 ; i < size ; i ++){
+		long long temp;
+		scanf("%llu",&temp);
+		update2(temp,1);
+		update(i,temp);
+	}
+	
+	while(operations--){
+		char a;
+		scanf(" %c",&a);
+		if(a=='C'){
+			long long b, c;
+			scanf("%llu%llu",&b,&c);
+//			prlong longf("C %llu %llu",b,c);
+			 long long temp = (query(b-1)-query(b-2));
+			update2(((long long)temp),-1);
+			update2(c,1);
+			update(b-1,c-((long long)temp));
+		}else if (a == 'S'){
+			long long b, c;
+			scanf("%llu%llu",&b,&c);
+//			prlong longf("S %llu %llu",b,c);
+			 long long temp = query(c-1)-query(b-2);
+			printf("%llu\n", temp);
+		}else{
+			long long b;
+			scanf("%llu", &b);
+//			prlong longf("Q %llu",b);
+			printf("%llu\n",query2(b));
+		}
+	}
+//	for(int i = 0 ; i < 20 ; i ++){
+//		printf("%i ", query2(i));
+//	}
+//	printf("\n");
+//	for(int i = 0 ; i < size ; i ++){
+//		printf("%i ", query2(i)-query2(i-1));
+//	}
+//	printf("\n");
+//	for(int i = 0 ; i < size ; i ++){
+//		printf("%i ", query(i)-query(i-1));
+//	}
+}

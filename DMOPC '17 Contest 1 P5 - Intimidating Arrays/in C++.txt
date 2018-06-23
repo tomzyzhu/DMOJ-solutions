@@ -1,0 +1,135 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+	int tree[1000000];
+	int n;
+	
+	struct two{
+		int l;
+		int r;
+		int i;
+		int value;
+		two(){
+			
+		}
+	};
+	bool two_sort(two const& lhs, two const& rhs) {
+    if (lhs.l != rhs.l)
+        return lhs.l < rhs.l;
+    return lhs.r <= rhs.r;
+	}
+	
+	bool two_order(two const& lhs, two const& rhs) {
+    return lhs.i <= rhs.i;
+	}
+	
+	void update(int index, int value) {
+		index++;
+		while(index<=n) {
+			tree[index-1]+=value;
+			index+= (index&-index);
+		}
+	}
+	int query (int index) {
+		index++;
+		int sum = 0;
+		while(index>0) {
+			sum += tree[index-1];
+			index-=(index&-index);
+		}
+		return sum;
+	}
+
+	
+	int main() {
+
+			int q;
+			
+			scanf("%i%i", &n, &q);
+			vector<int> rely[n+1];
+
+			stack<int> val ;
+			stack<int> ind ;
+			val.push(0);
+			ind.push(0);
+
+			for(int i = 0 ; i <n;i++) {
+				int value ;
+				scanf("%i",&value);
+				int index = i+1;
+				while(val.size()>1 && value > val.top()) {
+					int ip = ind.top();
+					ind.pop();
+					val.pop();
+					rely[ind.top()].push_back(ip);
+				}
+				val.push(value);
+				ind.push(index);
+			}
+
+			while(val.size()>1) {
+				int ip = ind.top();
+				ind.pop();
+				val.pop();
+				rely[ind.top()].push_back(ip);
+			}
+			
+			two queryT [q];
+			for(int i = 0 ; i <q ;i ++) {
+				scanf("%i%i", &queryT[i].l, &queryT[i].r);
+				queryT[i].i=i;
+			}
+			
+			sort(queryT, queryT+q, &two_sort);
+//			for(int i = 0 ; i < q ; i ++){
+//				printf("%i %i %i %i \n", queryT[i].value,  queryT[i].i,  queryT[i].l,  queryT[i].r);
+//			}
+			int currentIndexQuery=0;
+			for(int i = 0 ; i < q ; i ++){
+				int queryTo = queryT[i].l-1;
+				for(int i2 = currentIndexQuery ; i2 <= queryTo ; i2 ++){
+					int size = rely[i2].size();	
+					for(int i3 = 0 ; i3 <size ; i3++) {
+//						printf("update : %i\n", rely[i2][i3]-1);
+						update(rely[i2][i3]-1, 1);
+					}
+					currentIndexQuery++;
+				}
+				queryT[i].value=query(queryT[i].r-1)-query(queryT[i].l-2);
+			}
+			
+			sort(queryT, queryT+q, &two_order);
+//			for(int i = 0 ; i < q ; i ++){
+//				printf("%i %i %i %i \n", queryT[i].value,  queryT[i].i,  queryT[i].l,  queryT[i].r);
+//			}
+			
+			for(int i = 0 ; i < q ; i ++){
+				printf("%i\n", queryT[i].value);
+			}
+//			for(int i = 0 ; i <q ;i ++) {
+//				int l , r;
+//				scanf("%i%i", &l, &r);
+////				memset(tree, 0, sizeof(tree));
+//				int past = query(r-1)-query(l-2);
+////				for(int i2 = 0 ; i2 <n ; i2++) {
+////					printf("%i ", tree[i2]);
+////				}
+////				printf("\n");
+//				for(int i2 = 0 ; i2 <l ; i2++) {
+//					int size = rely[i2].size();	
+////					printf("size : %i at %i\n", size, i2);
+//					for(int i3 = 0 ; i3 <size ; i3++) {
+////						printf("update : %i\n", rely[i2][i3]-1);
+//						update(rely[i2][i3]-1, 1);
+//					}
+//
+//				}
+////				for(int i2 = 0 ; i2 <n ; i2++) {
+////					printf("%i ", tree[i2]);
+////				}
+////				printf("\n");
+//				printf("%i\n", query(r-1)-query(l-2)-past);
+//			
+//			}
+
+	}

@@ -1,0 +1,55 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class ICandy {
+	public static int n;
+	public static boolean [] info;
+	public static int x;
+	public static void main(String[] args) {
+		
+		BufferedReader in = new BufferedReader (new InputStreamReader(System.in));
+		
+		try {
+			
+			String [] t = in.readLine().split(" " );
+			
+			n = Integer.parseInt(t[0]);
+			x = Integer.parseInt(t[1]);
+			info = new boolean[n+1];
+			
+			for(int i = 0 ; i < n+1 ; i ++) {
+				info[i]=true;
+			}
+			seive();
+			
+			int ans = 0;
+			for(int i = 2 ; i < n+1; i ++) {
+				if(info[i]) {
+					ans += pick(i);
+				}
+			}
+			System.out.println(ans);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	private static int pick(int i) {
+		if(i!=n)
+		return mod(n-i) + mod(n-i-1);
+		return mod(n-i);
+	}
+	
+	private static int mod(int i) {
+		
+		return i/x+1;
+	}
+	private static void seive() {
+		for(int i = 2; i < n+1 ; i ++) {
+			if(info[i]) {
+				for(int i2 = 2; i2*i<n+1; i2++) {
+					info[i*i2] = false;
+				}
+			}
+		}
+	}
+}

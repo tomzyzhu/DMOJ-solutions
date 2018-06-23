@@ -1,0 +1,30 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class Multiple {
+	public static void main(String[] args) {
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		
+		try {
+			int q = Integer.parseInt(in.readLine());
+			char[] a = new char[q];
+			
+			for(int i = 0 ; i < q ; i ++) {
+				a[i] = in.readLine().charAt(0);
+			}
+			char[]c = new char[q];
+			
+			for(int i = 0 ; i < q ; i ++) {
+				c[i] = in.readLine().charAt(0);
+			}
+			int ans = 0;
+			for(int i = 0 ; i < q ; i ++) {
+				if(c[i]==a[i]) ans++;
+			}
+			System.out.println(ans);
+		}
+		catch(Exception e) {
+			
+		}
+	}
+}

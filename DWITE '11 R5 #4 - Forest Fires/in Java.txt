@@ -1,0 +1,74 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class Fire {
+	public static space [][] info= new space[10][10];
+	public static void main(String[] args) {
+		BufferedReader in = new BufferedReader (new InputStreamReader(System.in));
+
+		try {
+			for(int oc = 0 ; oc < 5 ; oc ++) {
+				
+				for(int i = 0 ; i < 10 ; i ++) {
+					String t = in.readLine();
+					for(int i2 = 0 ; i2 < 10 ; i2 ++) {
+						info[i][i2] = new space();
+						info[i][i2].id = t.charAt(i2);
+					}
+				}
+				for(int i = 0 ; i < 10 ; i ++) {
+					for(int i2 = 0 ; i2 < 10 ; i2 ++) {
+						if(info[i][i2].id == 'F' && info[i][i2].value==-1) {
+							info[i][i2].value = 0;
+							spread(i,i2);
+						}
+					}
+				}
+				
+				Exit:{
+					int most = 0;
+					for(int i = 0 ; i < 10 ; i ++) {
+						for(int i2 = 0 ; i2 < 10 ; i2 ++) {
+							most = Math.max(most, info[i][i2].value);
+							//System.out.print(info[i][i2].value + " ");
+							if(info[i][i2].id == 'T') {
+								System.out.println(-1);
+								break Exit;
+							}
+						}
+					//System.out.println();
+					}
+					System.out.println(most);
+				}
+				String b = in.readLine();
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	private static void spread(int i, int i2) {
+		if(i2>0&&(info[i][i2-1].id=='T'||(info[i][i2-1].id=='F'&& info[i][i2-1].value>info[i][i2].value+1))) {
+			info[i][i2-1].id='F';
+			info[i][i2-1].value = info[i][i2].value+1;
+			spread(i,i2-1);
+		}if(i2<9&&(info[i][i2+1].id=='T'||(info[i][i2+1].id=='F'&& info[i][i2+1].value>info[i][i2].value+1))) {
+			info[i][i2+1].id='F';
+			info[i][i2+1].value = info[i][i2].value+1;
+			spread(i,i2+1);
+		}if(i>0&&(info[i-1][i2].id=='T'||(info[i-1][i2].id=='F'&& info[i-1][i2].value>info[i][i2].value+1))) {
+			info[i-1][i2].id='F';
+			info[i-1][i2].value = info[i][i2].value+1;
+			spread(i-1,i2);
+		}if(i<9&&(info[i+1][i2].id=='T'||(info[i+1][i2].id=='F'&& info[i+1][i2].value>info[i][i2].value+1))) {
+			info[i+1][i2].id='F';
+			info[i+1][i2].value = info[i][i2].value+1;
+			spread(i+1,i2);
+		}
+		
+	}
+}
+
+class space{
+	public int value = -1;
+	public char id;
+}

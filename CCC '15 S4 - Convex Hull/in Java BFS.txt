@@ -1,0 +1,167 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+
+public class IslandsV2 {
+
+	public static Island2 [] island;
+	public static int maxDamage;
+
+
+	public static void startSail (int first) {
+
+		island[first].setLowestD(0);
+		island[first].setLowestT(0);
+
+		ArrayList<Integer> q = new ArrayList<Integer> ();
+		ArrayList<Integer> d = new ArrayList<Integer> ();
+		ArrayList<Integer> t = new ArrayList<Integer> ();
+		d.add(0);
+		t.add(0);
+		q.add(first);
+
+		while(!q.isEmpty()) {
+//			System.out.println(q);
+//			System.out.println(t);
+//			System.out.println(d);
+			int current = q.get(0);
+			int currentD = d.get(0);
+			int currentT = t.get(0);
+			q.remove(0);
+			d.remove(0);
+			t.remove(0);
+			int size = island[current].connect.size();
+			
+			//System.out.println("Current on " + current + " " + currentT + " " + currentD);
+			
+			for(int i = 0 ;i<size;i++) {
+
+				if(currentD+island[current].getCD(i)<maxDamage) {
+					if(currentD+island[current].getCD(i)<island[island[current].getC(i)].getLowestD()||currentT+island[current].getCT(i)<island[island[current].getC(i)].getLowestT()) {
+						island[island[current].getC(i)].setLowestD(Math.min(island[island[current].getC(i)].getLowestD(), currentD+island[current].getCD(i)));
+						island[island[current].getC(i)].setLowestT(Math.min(island[island[current].getC(i)].getLowestT(), currentT+island[current].getCT(i)));
+
+						//					System.out.println("sailed to " + island[islandNum].getC(i) + " from " + islandNum);
+						//					System.out.println("current island info : " + currentT + " " + currentD);
+						//					System.out.println("future info : " + (currentT+island[islandNum].getCT(i))+","+(currentD+island[islandNum].getCD(i)));
+						//					System.out.println("future info2 : " + island[island[islandNum].getC(i)].getLowestT());
+						//					System.out.println();
+						//System.out.println("ON " + current + " sailing to " + island[current].getC(i) + " " + (currentT+island[current].getCT(i))+" "+(currentD+island[current].getCD(i)));
+						q.add(island[current].getC(i));
+						t.add(currentT+island[current].getCT(i));
+						d.add(currentD+island[current].getCD(i));
+					}
+				}
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+
+		BufferedReader in = new BufferedReader(new InputStreamReader (System.in));
+
+		try {
+
+			String [] tokens = in.readLine().split(" ");
+
+			maxDamage = Integer.parseInt(tokens[0]);
+
+			int islands = Integer.parseInt(tokens[1]);
+
+			island = new Island2[islands];
+			for(int i = 0; i < islands ; i ++) {
+				island[i] = new Island2();
+			}
+
+			int routes = Integer.parseInt(tokens[2]);
+
+			int island1;
+			int island2;
+			int time;
+			int damage;
+			for(int i = 0 ; i < routes ; i++) {
+				tokens = in.readLine().split(" ");
+
+				island1 = Integer.parseInt(tokens[0])-1;
+				island2 = Integer.parseInt(tokens[1])-1;
+				time = Integer.parseInt(tokens[2]);
+				damage = Integer.parseInt(tokens[3]);
+
+				island[island1].addC(island2);
+				island[island1].addCD(damage);
+				island[island1].addCT(time);
+
+				island[island2].addC(island1);
+				island[island2].addCD(damage);
+				island[island2].addCT(time);
+			}
+			
+			tokens = in.readLine().split(" ");
+			startSail(Integer.parseInt(tokens[0])-1);
+			if(island[Integer.parseInt(tokens[1])-1].getLowestT()!=1000000000) {
+				System.out.println(island[Integer.parseInt(tokens[1])-1].getLowestT());
+			}else {
+				System.out.println(-1);
+			}
+			
+//			for(int i = 0 ; i < islands ; i ++) {
+//				System.out.println("island stats: " + (i) + " " + island[i].getLowestD() + " "  + island[i].getLowestD());
+//			}
+
+		}catch(Exception E) {
+			E.printStackTrace();
+		}
+	}
+
+}
+
+class Island2{
+
+	public int lowestT = 1000000000;
+	public int lowestD = 1000000000;
+	public ArrayList <Integer> connect = new ArrayList<Integer>();
+	public ArrayList <Integer> connectT = new ArrayList<Integer>();
+	public ArrayList <Integer> connectD = new ArrayList<Integer>();
+
+	public Island2() {
+
+	}
+
+	public int getLowestT() {
+		return lowestT;
+	}
+	public void setLowestT(int lowestT) {
+		this.lowestT = lowestT;
+	}
+	public int getLowestD() {
+		return lowestD;
+	}
+	public void setLowestD(int lowestD) {
+		this.lowestD = lowestD;
+	}
+
+
+	public void addC (int i) {
+		this.connect.add(i);
+	}
+
+	public int getC(int i) {
+		return this.connect.get(i);
+	}
+
+	public void addCT (int i) {
+		this.connectT.add(i);
+	}
+
+	public int getCT(int i) {
+		return this.connectT.get(i);
+	}
+	public void addCD (int i) {
+		this.connectD.add(i);
+	}
+
+	public int getCD(int i) {
+		return this.connectD.get(i);
+	}
+
+}

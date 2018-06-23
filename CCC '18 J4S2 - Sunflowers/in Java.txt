@@ -1,0 +1,67 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+
+
+public class Q2 {
+	public static int [][] store;
+	public static void main(String[] args) {
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+
+		try{
+
+			int n = Integer.parseInt(in.readLine());
+			store = new int [n][n];
+			for(int i = 0 ; i < n ; i ++){
+				String [] t = in.readLine().split(" ");
+				for(int i2 = 0 ; i2 < n ; i2 ++){
+					store[i][i2] = Integer.parseInt(t[i2]);
+				}
+			}
+			
+			if(store[0][0]>store[0][n-1] && store[0][0]>store[n-1][n-1] && store[0][0]>store[n-1][0] ){
+				for(int i = 0 ; i < n ; i ++){
+					for(int i2 = 0 ; i2 < n ; i2 ++){
+						System.out.print(store[n-1-i][n-1-i2]);
+						if(i2!=n-1){
+							System.out.print(" ");
+						}
+					}
+					System.out.println();
+				}
+			}else if(store[0][n-1]>store[0][0] && store[0][n-1]>store[n-1][n-1] && store[0][n-1]>store[n-1][0] ){
+				for(int i = 0 ; i < n ; i ++){
+					for(int i2 = 0 ; i2 < n ; i2 ++){
+						System.out.print(store[n-1-i2][i]);
+						if(i2!=n-1){
+							System.out.print(" ");
+						}
+					}
+					System.out.println();
+				}
+			}else if(store[n-1][0]>store[0][n-1] && store[n-1][0]>store[n-1][n-1] && store[n-1][0]>store[0][0] ){
+				for(int i = 0 ; i < n ; i ++){
+					for(int i2 = 0 ; i2 < n ; i2 ++){
+						System.out.print(store[i2][n-1-i]);
+						if(i2!=n-1){
+							System.out.print(" ");
+						}
+					}
+					System.out.println();
+				}
+			}else if(store[n-1][n-1]>store[0][n-1] && store[n-1][n-1]>store[0][0] && store[n-1][n-1]>store[n-1][0] ){
+				for(int i = 0 ; i < n ; i ++){
+					for(int i2 = 0 ; i2 < n ; i2 ++){
+						System.out.print(store[i][i2]);
+						if(i2!=n-1){
+							System.out.print(" ");
+						}
+					}
+					System.out.println();
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+}

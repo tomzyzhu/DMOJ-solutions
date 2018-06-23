@@ -1,0 +1,147 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+
+public class Bunnies {
+	
+	public static Node [] node =  new Node[200000];
+	public static int clb = Integer.MAX_VALUE;
+	public static int n;
+	public static int end;
+	
+	public static void dfs (int current, int currentDistance) {
+		int sizeOfConnections = node[current].connect.size();
+		int saveclbp = clb;
+		if(clb>node[current].lowestB) {
+			clb = node[current].lowestB;
+		}
+		if(current == end) {
+			System.out.println(clb);
+			System.exit(0);
+		}
+		
+		//System.out.println("on " + current + " with " + clb);
+		for(int i = 0 ; i<sizeOfConnections; i ++) {
+			
+			int goingto =  node[current].getC(i);
+			
+			int nextnodesLowestDistance = node[goingto].getLowestD();
+			
+			if(nextnodesLowestDistance>currentDistance+1) {
+				node[goingto].setLowestD(currentDistance+1);
+				dfs(goingto,currentDistance+1);
+			}
+			
+		}
+		clb = saveclbp;
+	}
+
+	public static void dfsb (int current, int currentDistance) {
+		
+		int sizeOfConnections = node[current].connect.size();
+		node[current].lowestB = Math.min(node[current].lowestB, currentDistance);
+		
+		for(int i = 0 ; i<sizeOfConnections; i ++) {
+			
+			int goingto =  node[current].getC(i);
+			
+			int nextnodesLowestDistance = node[goingto].lowestB;
+			
+			if(nextnodesLowestDistance>currentDistance+1) {
+				//System.out.println("update " + goingto + " with " + (currentDistance+1));
+				dfsb(goingto,currentDistance+1);
+			}
+			
+		}
+	}
+	public static void start (int first) {
+		
+		
+		//set own distance to 0
+		node[first].setLowestD(0);
+		//start dfs at first
+		dfs(first, 0);
+		
+	}
+
+	public static void main(String[] args) {
+		
+		BufferedReader in = new BufferedReader(new InputStreamReader (System.in));
+		
+		try {
+			
+			String [] t = in.readLine().split(" ");
+			n = Integer.parseInt(t[0]);
+			int r = Integer.parseInt(t[1]);
+			
+			
+			//create nodes equal to how many there will be
+			///node = new Node[nodes];
+			
+			//initialize nodes
+			for(int i = 0 ; i < n;i++) {
+				node[i] = new Node();
+			}
+			
+			int connect = n-1;
+			int node1;
+			int node2;
+			int val;
+			for(int i = 0 ; i < connect;i++) {
+				//read in
+				t = in.readLine().split(" ");
+				
+				node1 = Integer.parseInt(t[0])-1;
+				node2 = Integer.parseInt(t[1])-1;
+				
+				//update node1 with distance val
+				node[node1].addC(node2);
+				
+				//update node2 with distance val
+				node[node2].addC(node1);
+			}
+			for(int i = 0 ; i < r;i++) {
+				//read in
+				t = in.readLine().split(" ");
+				
+				if(node[Integer.parseInt(t[0])-1].lowestB!=0) {
+				dfsb(Integer.parseInt(t[0])-1,0);
+				}
+			}
+			t = in.readLine().split(" ");
+			end = Integer.parseInt(t[1])-1;
+			//System.out.println(end);
+			start(Integer.parseInt(t[0])-1);
+			
+		}catch(Exception E) {
+			E.printStackTrace();
+		}
+	}
+	
+}
+
+class Node{
+	
+	public int lowestD = Integer.MAX_VALUE;
+	public int lowestB = Integer.MAX_VALUE;
+	public ArrayList <Integer> connect = new ArrayList<Integer>();
+	
+	public Node() {
+		
+	}
+	public int getLowestD() {
+		return lowestD;
+	}
+	public void setLowestD(int lowestD) {
+		this.lowestD = lowestD;
+	}
+	
+	
+	public void addC (int i) {
+		this.connect.add(i);
+	}
+	
+	public int getC(int i) {
+		return this.connect.get(i);
+	}
+}

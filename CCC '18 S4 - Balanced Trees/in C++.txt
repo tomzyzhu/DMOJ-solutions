@@ -1,0 +1,23 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+typedef long long ll;
+int N; unordered_map <int,ll> dp;
+
+ll f(int n ){
+    if(n == 1 || n == 2) return 1;
+    if (dp.count(n)) return dp[n];
+    ll ans = 0 ; int k = n;
+    while (k >=2){
+        int w = n/k, nxt = n/(w+1);
+        ans+= (k-nxt)*f(w);
+        k = nxt;
+    }
+    return dp[n] = ans;
+}
+
+int main()
+{
+    scanf("%d" , &N);
+    printf("%lld" , f(N));
+}

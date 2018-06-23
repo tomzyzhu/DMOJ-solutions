@@ -1,0 +1,35 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class tiles {
+	public static void main(String[] args) {
+		BufferedReader in = new BufferedReader (new InputStreamReader(System.in));
+
+		try {
+			for(int i = 0 ; i < 5 ; i ++) {
+				String []t = in.readLine().split(" ");
+				int a = Integer.parseInt(t[0]);
+				int b = Integer.parseInt(t[1]);
+				System.out.println(tiles(Math.max(a, b),Math.min(a, b)));
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static int tiles(int max, int min) {
+		if(min == 0) {
+			return 0;
+		}
+		int p = 1;
+		while(min/(int)Math.pow(2, p)>0) {
+			p++;
+		}
+		p--;
+		//System.out.println("max " + max + " min " + min + " p " + p);
+		
+		return tiles(Math.max(min, max-(int)Math.pow(2, p)), Math.min(min, max-(int)Math.pow(2, p))) + tiles((int)Math.pow(2, p), min-(int)Math.pow(2, p))+1;
+		
+		
+	}
+}

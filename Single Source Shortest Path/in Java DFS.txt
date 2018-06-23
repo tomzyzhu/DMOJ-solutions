@@ -1,0 +1,107 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+
+public class Short {
+	
+	public static Node [] node;
+	
+	public static void dfs (int current, int previous, int distance) {
+		if(distance<node[current].getLowestD()) {
+			node[current].setLowestD(distance);
+		}
+		int size = node[current].connect.size();
+		for(int i = 0 ; i<size; i ++) {
+			if(node[current].getC(i)!=previous && node[node[current].getC(i)].getLowestD()>distance+node[current].getCD(i)) {
+				dfs(node[current].getC(i),current,distance+node[current].getCD(i));
+			}
+		}
+		//System.out.println(current + " " + distance);
+	}
+
+	
+	public static void start (int first) {
+		
+		node[first].setLowestD(0);
+		dfs(first,-1,0);
+	}
+
+	public static void main(String[] args) {
+		
+		BufferedReader in = new BufferedReader(new InputStreamReader (System.in));
+		
+		try {
+			
+			String [] tokens = in.readLine().split(" ");
+			int nodes = Integer.parseInt(tokens[0]);
+			node = new Node[nodes];
+			for(int i = 0 ; i < Integer.parseInt(tokens[0]);i++) {
+				node[i] = new Node();
+			}
+			
+			int connect = Integer.parseInt(tokens[1]);
+			int node1;
+			int node2;
+			int val;
+			for(int i = 0 ; i < connect;i++) {
+				tokens = in.readLine().split(" ");
+				
+				node1 = Integer.parseInt(tokens[0])-1;
+				node2 = Integer.parseInt(tokens[1])-1;
+				val = Integer.parseInt(tokens[2]);
+				
+				node[node1].addC(node2);
+				node[node1].addCD(val);
+				node[node2].addC(node1);
+				node[node2].addCD(val);
+			}
+			start(0);
+			for(int i = 0 ; i < nodes; i ++) {
+				if(node[i].getLowestD()==1000000000) {
+					System.out.println(-1);
+				}else {
+					System.out.println(node[i].getLowestD());
+				}
+			}
+			
+		}catch(Exception E) {
+			E.printStackTrace();
+		}
+	}
+	
+}
+
+class Node{
+	
+	public int lowestD = 1000000000;
+	public ArrayList <Integer> connect = new ArrayList<Integer>();
+	public ArrayList <Integer> connectD = new ArrayList<Integer>();
+	
+	public Node() {
+		
+	}
+	public int getLowestD() {
+		return lowestD;
+	}
+	public void setLowestD(int lowestD) {
+		this.lowestD = lowestD;
+	}
+	
+	
+	public void addC (int i) {
+		this.connect.add(i);
+	}
+	
+	public int getC(int i) {
+		return this.connect.get(i);
+	}
+	
+	public void addCD (int i) {
+		this.connectD.add(i);
+	}
+	
+	public int getCD(int i) {
+		return this.connectD.get(i);
+	}
+	
+}

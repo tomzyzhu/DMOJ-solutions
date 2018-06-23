@@ -1,0 +1,19 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        BufferedReader in = new BufferedReader(new InputStreamReader (System.in));
+		
+		try {
+			
+			String [] t = in.readLine().split(" ");
+			int a = Integer.parseInt(t[0]);
+			int b = Integer.parseInt(t[1]);
+			System.out.println(a*b-a);
+			
+		}catch(Exception E) {
+			E.printStackTrace();
+		}
+    }
+}

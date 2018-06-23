@@ -1,0 +1,36 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+
+public class pass {
+	public static void main(String[] args) throws IOException {
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		String a = in.readLine();
+		String b = in.readLine();
+		HashMapCharacter, Integer map = new HashMapCharacter,Integer();
+		for(int i = 0 ; i  a.length(); i ++) {
+			if(map.containsKey(a.charAt(i))) {
+				map.put(a.charAt(i), map.get(a.charAt(i))+1);
+			}else {
+				map.put(a.charAt(i), 1);
+			}
+		}
+		for(int i = 0 ; i  b.length(); i ++) {
+			if(b.charAt(i)!='') {
+				if(map.containsKey(b.charAt(i))) {
+					if (map.get(b.charAt(i))==0) {
+						System.out.println(N);
+						System.exit(0);
+					}else {
+						map.put(b.charAt(i), map.get(b.charAt(i))-1);
+					}
+				}else {
+					System.out.println(N);
+					System.exit(0);
+				}
+			}
+		}
+		System.out.println(A);
+	}
+}

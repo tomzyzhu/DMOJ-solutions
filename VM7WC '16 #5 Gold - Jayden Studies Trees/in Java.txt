@@ -1,0 +1,131 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+
+public class Short {
+	
+	public static Node [] node;
+	public static int mosti;
+	public static int most = 0;
+	public static void dfs (int current, int currentDistance) {
+		
+		int sizeOfConnections = node[current].connect.size();
+		
+		for(int i = 0 ; i<sizeOfConnections; i ++) {
+			
+			int goingto =  node[current].getC(i);
+			
+			int traveldistance = node[current].getCD(i);
+			
+			int nextnodesLowestDistance = node[goingto].getLowestD();
+			
+			if(nextnodesLowestDistance>currentDistance+traveldistance) {
+				node[goingto].setLowestD(currentDistance+traveldistance);
+				if(currentDistance+traveldistance>most){
+				    mosti = goingto;
+				    most = currentDistance+traveldistance;
+				}
+				dfs(goingto,currentDistance+traveldistance);
+			}
+			
+		}
+	}
+
+	
+	public static void start (int first) {
+		
+		
+		//set own distance to 0
+		node[first].setLowestD(0);
+		//start dfs at first
+		dfs(first, 0);
+		
+	}
+
+	public static void main(String[] args) {
+		
+		BufferedReader in = new BufferedReader(new InputStreamReader (System.in));
+		
+		try {
+			
+			String [] tokens = in.readLine().split(" ");
+			int nodes = Integer.parseInt(tokens[0]);
+			
+			//create nodes equal to how many there will be
+			node = new Node[nodes];
+			
+			//initialize nodes
+			for(int i = 0 ; i < nodes;i++) {
+				node[i] = new Node();
+			}
+			
+			int connect = nodes-1;
+			int node1;
+			int node2;
+			int val;
+			for(int i = 0 ; i < connect;i++) {
+				//read in
+				tokens = in.readLine().split(" ");
+				
+				node1 = Integer.parseInt(tokens[0])-1;
+				node2 = Integer.parseInt(tokens[1])-1;
+				
+				//update node1 with distance val
+				node[node1].addC(node2);
+				node[node1].addCD(1);
+				
+				//update node2 with distance val
+				node[node2].addC(node1);
+				node[node2].addCD(1);
+			}
+			
+			//start dfs at node 0, because thats the task
+			start(0);
+			for(int i = 0 ; i < nodes; i ++){
+			    node[i].lowestD = 1000000000;
+			}
+			most = 0;
+			start(mosti);
+			System.out.println(most);
+			
+		}catch(Exception E) {
+			E.printStackTrace();
+		}
+	}
+	
+}
+
+class Node{
+	
+	public int lowestD = 1000000000;
+	public ArrayList <Integer> connect = new ArrayList<Integer>();
+	public ArrayList <Integer> connectD = new ArrayList<Integer>();
+	
+	public Node() {
+		
+	}
+	public int getLowestD() {
+		return lowestD;
+	}
+	public void setLowestD(int lowestD) {
+		this.lowestD = lowestD;
+	}
+	
+	
+	public void addC (int i) {
+		this.connect.add(i);
+	}
+	
+	public int getC(int i) {
+		return this.connect.get(i);
+	}
+	
+	public void addCD (int i) {
+		this.connectD.add(i);
+	}
+	
+	public int getCD(int i) {
+		return this.connectD.get(i);
+	}
+	
+}

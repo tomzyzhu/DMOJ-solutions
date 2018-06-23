@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int K, N;
+long long val [1000003];
+long long total = 0;
+long long maximum = 0;
+int main()
+{
+
+    scanf("%i%i", &K , &N);
+    if(K>N+1) printf("-1"); else{
+    for(int i = 0 ; i < N ;i ++){
+        scanf("%lld",&val[i]);
+    }
+
+    if(K>2){
+            total = val[K-1];
+    
+        maximum = max(total,maximum);
+    for(int i = K-3; i >=0 ;i -=2){
+        if(i==1){
+            total+= max(val[0],val[1]) +val[i+1]- val[i+2];
+        }else{
+
+        total += val[i] + val[i+1] -val[i+2];
+
+        //printf("total: %lld + maximum %lld\n" , total,maximum);
+        }
+        maximum = max(total,maximum);
+
+        //printf("total: %lld + maximum %lld\n" , total,maximum);
+    }
+
+    printf("%lld",maximum);
+    }else{
+        printf("%lld", max(val[1],val[0]));
+    }
+    }
+
+}

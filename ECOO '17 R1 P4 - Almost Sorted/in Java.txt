@@ -1,0 +1,76 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+
+public class Stupidityisaslowandinsidiouskiller {
+
+	public static int binary (ArrayList<String> t, int l, int r, String val) {
+		int mid = (l+r)/2;
+		///System.out.println("at " + mid);
+		if (t.get(mid).equals(val)) {
+			return mid;
+		}else {
+			if(t.get(mid).compareTo(val)>0) { //val is before t.get(i)
+				return binary(t, l,mid,val);
+			}else { //val is after t.get(i)	
+				return binary(t, mid+1,r,val);
+			}
+		}
+		
+	}
+	
+	public static void swap (ArrayList<String> t, int i, int i2) {
+		String temp = t.get(i);
+		t.set(i, t.get(i2));
+		t.set(i2, temp);
+	}
+	public static void main(String[] args) {
+
+		BufferedReader in = new BufferedReader (new InputStreamReader (System.in));
+		try {
+			for(int o = 0 ; o < 10 ; o ++) {
+				int n = Integer.parseInt(in.readLine());
+
+				ArrayList<String> original = new ArrayList<String> ();
+				ArrayList<String> ordered = new ArrayList<String> ();
+				for(int i = 0 ; i < n ; i++) {
+					String p = in.readLine();
+					original.add(p);
+					ordered.add(p);
+					
+				}
+				Collections.sort(ordered);
+				//System.out.println(original.toString());
+				
+				int ans = Integer.MAX_VALUE;
+				for(int i = 0 ; i < n ; i ++) {
+					int tempa = 0;
+					String store = original.get(i);
+					int storeOI = binary(ordered, 0,n-1,store);
+					//System.out.println(i + " "  + storeOI);
+					ordered.remove(storeOI);
+					@SuppressWarnings("unchecked")
+					ArrayList<String> man = (ArrayList<String>) original.clone();
+					man.remove(i);
+					for(int i2 = 0 ; i2 < n-1; i2++) {
+						while(!man.get(i2).equals(ordered.get(i2))) {
+							swap(man, i2, binary(ordered, 0, n-2, man.get(i2)));
+							//System.out.println("swap " + i2 + " " + binary(ordered, 0, n-2, man.get(i2)));
+							tempa++;
+						}
+					}
+					ordered.add(storeOI, store);
+					//System.out.println(ordered.toString());
+					ans = Math.min(ans, tempa);
+					//System.out.println(ans);
+				}
+				System.out.println( ans);
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+}

@@ -1,0 +1,49 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+
+public class WordWrap {
+	public static void main(String[] args) {
+
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+
+		try{
+
+			for(int i = 0 ; i < 10 ; i ++){
+
+				int n = Integer.parseInt(in.readLine());
+				String [] t = in.readLine().split(" ");
+				int index = 0;
+				String line="";
+				while(index<t.length){
+					if (line.equals("") && t[index].length()>n){
+						System.out.println(t[index].substring(0, n));
+						t[index] = t[index].substring(n, t[index].length());
+					}
+					else if (line.length()+t[index].length()<n){
+						if(line.length()==0)
+							line = t[index];
+						else
+							line = line + " " + t[index];
+
+						index++;
+					}else if(line.length()==0){
+						System.out.println(t[index].substring(0, n));
+						t[index] = t[index].substring(n, t[index].length());
+						if(t[index].length()==0)
+							index++;
+					}
+					else{
+						System.out.println(line);
+						line = "";
+					}
+				}
+				if(!line.equals(""))
+					System.out.println(line);
+				System.out.println("=====");
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+}

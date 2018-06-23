@@ -1,0 +1,76 @@
+#include <bits/stdc++.h>
+
+/* run this program using the console pauser or add your own getch, system("pause") or input loop */
+
+using namespace std;
+
+map<string,int> foodcode;
+
+struct thing{
+
+	int distance;
+	int food;
+	thing(){
+		distance = INT_MAX;
+		food = 0;
+	}
+
+};
+
+bool thing_sort(thing const& lhs, thing const& rhs) {
+    if (lhs.distance != rhs.distance)
+        return lhs.distance < rhs.distance;
+    return lhs.food < rhs.food;
+}
+
+
+thing info[1000];
+
+int main() {
+
+	int foods;
+	scanf("%i", &foods);
+
+	for(int i = 0 ; i < foods ; i ++){
+		char t[10];
+		int a;
+		scanf(" %s %i",&t,&a );
+//		food.insert(pair<string, int>(t, a));
+        string str = t;
+		foodcode[str] = a;
+	}
+	int n;
+	scanf("%i", &n);
+	for(int i = 0 ; i < n ; i ++){
+		char t[10];
+		int a;
+		scanf(" %s %i",&t,&a );
+		string str = t;
+		int &energy = foodcode[str];
+		info[i].distance=a;
+		info[i].food=energy;
+	}
+
+	sort(info, info+n, &thing_sort);
+
+	int currentd = 0;
+	int currente = 0;
+	int ans = 0;
+	bool term = false;
+	for(int i = 0 ; i < n && !term; i ++){
+		int energyloss = info[i].distance-currentd;
+		if(!energyloss||currente-energyloss>=0){
+			ans++;
+			currente = currente-energyloss+info[i].food;
+			currentd = info[i].distance;
+		}else{
+			term = true;
+		}
+	}
+
+	printf("%i\n",ans);
+
+//	for(int i = 0 ; i < n; i ++){
+//		printf("%i %i\n", info[i].food, info[i].distance);
+//	}
+}

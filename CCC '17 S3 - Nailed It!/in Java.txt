@@ -1,0 +1,43 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class Nail {
+	public static void main(String[] args) {
+BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		
+		try {
+			int n = Integer.parseInt(in.readLine());
+			int [] half = new int [2000];
+			String [] t = in.readLine().split(" ");
+			
+			for(int i = 0 ; i < n; i ++) {
+				half[Integer.parseInt(t[i])-1] ++;
+			}
+			
+			int [] info = new int[3999];
+			
+			for(int i =0; i < 2000; i ++) {
+				info[2*i]+= half[i]/2;
+				for(int i2 =i+1; i2 < 2000; i2 ++) {
+					info[i+i2]+= Math.min(half[i], half[i2]);
+				}
+			}
+			int heights=0;
+			int width=0; 
+			for(int i = 0 ; i < 3999; i ++) {
+				if(info[i]!=0) {
+				if(info[i]>width) {
+					width = info[i];
+					heights = 1;
+				}else if (info[i]==width) {
+					heights++;
+				}
+				}
+			}
+			
+			System.out.println(width+ " " + (heights));
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+}

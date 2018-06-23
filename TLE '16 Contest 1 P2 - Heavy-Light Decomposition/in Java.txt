@@ -1,0 +1,103 @@
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class q2 {
+
+	public static double mode (double [] array){ //This is for modes that are doubles AND THERE IS NO ZEROS... just switch the 0 in the initialization of arrayInfo to something else
+		double [][] arrayInfo = new double [2][array.length];// first index info: 0 for array number value; 1 for the number of times 
+		for (int counter1 = 0; counter1<array.length; counter1++){
+			arrayInfo[0][counter1]=0; //change here
+		}
+		int counter;
+		boolean indexAdded;
+		for (int counter1 = 0; counter1<array.length; counter1++){ //this checks all values in the input array to put in to the array information
+			counter = 0;
+			indexAdded = false;
+			while (counter<array.length&&arrayInfo[0][counter]!=0){ //this one sweeps the array information to check which ones should be updated
+				if (arrayInfo[0][counter]==array[counter1]){
+					indexAdded = true;
+					arrayInfo[1][counter]++;
+				}
+				counter++;
+			}
+			if(counter<array.length && arrayInfo[0][counter]==0&&indexAdded == false){
+				arrayInfo[0][counter] = array[counter1];
+				arrayInfo[1][counter] = 1;
+			}
+		}
+		double maxCount = 0;
+		double totalMode = 0;
+		double uniqueModes = 0;
+		for (int counter1 = 0; counter1<array.length; counter1++){
+			if (arrayInfo[1][counter1]>maxCount){
+				maxCount = arrayInfo[1][counter1];
+				totalMode = arrayInfo[0][counter1];
+				uniqueModes =1;
+			}
+			else if (arrayInfo[1][counter1]==maxCount){
+				totalMode += arrayInfo[0][counter1];
+				uniqueModes++;
+			}
+		}
+		return totalMode/uniqueModes;
+	}
+	public static double median(double []array){
+		Arrays.sort(array);
+		double median;
+		if(array.length % 2 == 0){
+			median = (array[(array.length)/2] + array[((array.length)/2)-1]) / 2;
+		} else{
+			median = array[(array.length - 1)/2];
+		}
+		return median;
+	}
+
+	public static void main(String[] args){
+
+		Scanner input = new Scanner (System.in);
+
+		double boxAmount = input.nextInt();
+
+		double[] boxWeight = new double[(int)(boxAmount)];
+		double totalWeight = 0;
+
+
+
+
+		for(int index = 0; index < boxAmount; index++){
+
+			boxWeight[index] = input.nextInt();
+			totalWeight += boxWeight[index];
+		}
+
+		Arrays.sort(boxWeight);
+
+
+		double medianVal = median(boxWeight);
+
+
+		double mean = totalWeight/boxAmount;
+
+		double modeVal=mode(boxWeight);
+
+		double use= 0;
+		if (mean <=medianVal && mean<=modeVal){
+			use = mean;
+		}else if (medianVal<=mean && medianVal<= modeVal){
+			use = medianVal;
+		}else if (modeVal <=medianVal && modeVal<= mean){
+			use = modeVal;
+		}
+		else{
+			System.out.println("Error");
+		}
+		int outputBoxes=0;
+		for(int index = 0; index<boxAmount; index++){
+			if (boxWeight[index] <= use){
+				outputBoxes++;
+			}
+		}
+		System.out.println(outputBoxes);
+
+	}
+}

@@ -1,0 +1,45 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+long long n;
+long long info [9];
+const long long maxt = (long long)pow(5,9);
+long long total = 1;
+long long initial [maxt];
+long long psa[maxt][2];
+
+int main()
+{
+    scanf("%lld" , &n);
+    for(long long i = n-1 ; i >=0 ; i--){
+        scanf("%lld", &info[i]);
+        //printf("info i %i \n", info[i]);
+        total*= info[i];
+    }
+    for(long long i = 0 ; i < total; i ++){
+        scanf("%lld" , &initial[i]);
+        //printf("initial[i] %i \n", initial[i]);
+        psa[i][0] = initial[i];
+    }
+    long long d = 1;
+    long long dim = 1;
+    long long use = 0;
+    for (long long i = 0; i < n ; i ++){
+        d = dim;
+        dim *=info[i];
+        use = i%2;
+        for(long long index = 0; index<total; index++){
+                psa[index][(use+1)%2]= psa[index][use];
+            if(index-d>=0&&(long long)(index-d)/dim == (long long)index/dim){
+                psa[index][(use+1)%2]+=psa[index-d][use];
+            }
+            if(index+d<total&&(long long)(index+d)/dim == (long long)index/dim){
+                psa[index][(use+1)%2]+=psa[index+d][use];
+            }
+
+        }
+    }
+    for(long long i = 0 ; i < total ; i ++){
+        printf("%lld\n", (psa[i][(use+1)%2]-initial[i]));
+    }
+}

@@ -1,0 +1,59 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+
+public class Favourite {
+	public static ArrayList <Integer>uni ;
+	
+	
+	public static void main(String[] args) {
+		BufferedReader in = new BufferedReader(new InputStreamReader (System.in));
+		try {
+			int n = Integer.parseInt(in.readLine());
+			String [] tokens = in.readLine().split(" ");
+			HashMap<Integer,Integer> map = new HashMap<Integer,Integer>();
+			uni = new ArrayList<Integer>();
+			
+			for(int i = 0 ; i < n; i ++) {
+				int temp = Integer.parseInt(tokens[i]);
+				
+				if(map.get(temp)!=null) {
+					map.put(temp, map.get(temp)+1);
+				}else {
+					map.put(temp, 1);
+					uni.add(temp);
+				}
+					
+			}
+			
+			Collections.sort(uni);
+			int q = Integer.parseInt(in.readLine());
+			for(int i = 0 ; i < q; i ++) {
+				
+				int find = Integer.parseInt(in.readLine());
+				//System.out.println("find " + find);
+				
+//				if(map.get(find)==null) {
+//					uni.indexOf(new Integer(find));
+//				}
+				int low = 0;
+				int high = uni.size(); 
+				while (low != high) {
+				    int mid = (low + high) / 2; 
+				    if (uni.get(mid) < find) {
+				        low = mid + 1;
+				    }
+				    else {
+				        high = mid;
+				    }
+				}
+				find = uni.get(low);
+				System.out.println(find + " " + map.get(find));
+			}
+		}catch(Exception e) {
+			
+		}
+	}
+}

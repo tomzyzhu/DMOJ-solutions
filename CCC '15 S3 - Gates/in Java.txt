@@ -1,0 +1,52 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Stack;
+//Gates
+public class Gates {
+	public static int[] port ;
+	public static int nAirPort;
+	public static void main(String [] args) {
+
+		try {
+			BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+			int ports = Integer.parseInt(in.readLine());
+			int p = Integer.parseInt(in.readLine());
+
+			port = new int[ports];
+
+			for(int i = 0; i < ports; i++){
+				port[i] = i;
+			}
+			int answer = 0;
+			int token;
+			Stack<Integer> s = new Stack<Integer>();
+			Exit:{
+			for(int i = 0; i < p; i++){
+				token = Integer.parseInt(in.readLine())-1;
+				
+				while(token>=0&&port[token]!=token) {
+					s.add(token);
+					token = port[token];
+				}
+				if(token>=0) {
+					answer++;
+					int temp = token-1;
+					int size = s.size();
+					port[token]=temp;
+					for(int i2 = 0 ; i2 <size;i2++) {
+						port[s.get(i2)]=temp;
+					}
+					s.removeAllElements();
+				}if(token==-1) {
+					break Exit;
+				}
+			}
+			}
+			System.out.println(answer);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+}

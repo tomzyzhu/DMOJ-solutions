@@ -1,0 +1,41 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+typedef long long lld;
+
+lld a,b,c;
+lld dp[1000001];
+lld s[1000001];
+lld n;
+
+
+int main()
+{
+
+    memset(dp,-0x3f, sizeof(dp));
+    scanf("%lld ", &n);
+    scanf("%lld %lld %lld", &a,&b,&c);
+    for(int i = 1 ; i <= n ; i ++){
+        scanf("%lld", &s[i]);
+        s[i] += s[i-1];
+    }
+
+    dp[0] = 0;
+    int useI = 0;
+    for(int i = 1 ; i <= n ; i ++){
+
+        for(int j = useI ; j <i; j ++){
+            lld t = s[i]-s[j];
+            //dp[i] = max(dp[i], dp[j] + a*t*t + b*t+c);
+            lld newVal = dp[j] + a*t*t + b*t+c;
+            if(newVal > dp[i]){
+                dp[i] = newVal;
+                useI = j;
+            }
+        }
+    }
+    printf("%lld" , dp[n]);
+
+
+}

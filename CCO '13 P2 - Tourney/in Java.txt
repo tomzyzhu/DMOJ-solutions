@@ -1,0 +1,93 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class Tourney {
+	
+	static C[] binaryTree = new C[2100000];
+	static int power;
+	
+	public static void main(String[] args) throws NumberFormatException, IOException{
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		
+		String[] tokens = new String[3];
+		tokens = in.readLine().split(" ");
+		power = Integer.parseInt(tokens[0]);
+		int n = (int)Math.pow(2, power) + (int)Math.pow(2, power)-1;
+		
+		int queries = Integer.parseInt(tokens[1]);
+		
+		int counter = 1;
+		for(int i = (int)Math.pow(2, power); i <= n; i++){
+			binaryTree[i] = new C(counter, Integer.parseInt(in.readLine()));
+			counter++;
+		}
+		
+		update();
+		
+		for(int i = 0; i <queries;i++){
+			tokens = in.readLine().split(" ");
+			if(tokens[0].contains("R")){
+				int index = (int)Math.pow(2, power) - 1 + Integer.parseInt(tokens[1]);
+				binaryTree[index].level = Integer.parseInt(tokens[2]);
+				for(int j = index/2; j>=1;j/=2){
+					if(binaryTree[j*2].level >= binaryTree[j*2+1].level){
+						binaryTree[j] = binaryTree[j*2];
+					}
+					else{
+						binaryTree[j] = binaryTree[j*2+1];
+					}
+				}
+			
+			}
+			else if(tokens[0].contains("W")){
+				System.out.println(binaryTree[1].id);
+			}
+			else{
+				int index = (int)Math.pow(2, power) - 1 + Integer.parseInt(tokens[1]);
+				int wins = 0;
+				for(int j = index/2; j >= 1; j=j/2){
+					if(binaryTree[j].level == binaryTree[index].level){
+						wins++;
+					}
+					else{
+						break;
+					}
+				}
+				System.out.println(wins);
+			}
+			
+//			for(int k = 1; k<=n;k++){
+//				System.out.print(binaryTree[k].level + " ");
+//			}
+//			System.out.println();
+//			System.out.println();
+		}
+		
+	
+		
+	}
+	
+	public static void update(){
+		for(int i = (int)Math.pow(2, power)-1; i>= 1; i--){
+			if(binaryTree[i*2].level >= binaryTree[i*2+1].level){
+				binaryTree[i] = binaryTree[i*2];
+			}
+			else{
+				binaryTree[i] = binaryTree[i*2+1];
+			}
+		}
+	}
+
+}
+
+class C{
+	int id;
+	int level;
+	
+	public C(int id, int level){
+		this.id = id;
+		this.level = level;
+	}
+	
+}

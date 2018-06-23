@@ -1,0 +1,56 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+
+public class junk21231 {
+	public static int n;
+	public static int ans = 0;
+	
+	public static boolean isP (ArrayList<Integer> t) {
+		for(int i = 0; i < t.size()/2 +1 ; i ++) {
+		    int a = t.get(i), b = t.get(t.size()-i-1);
+			if(a != b)
+				return false;
+		}
+		return true;
+	}
+	public static void main(String[] args) {
+		
+		BufferedReader in = new BufferedReader (new InputStreamReader(System.in));
+		
+		try {
+			n = Integer.parseInt(in.readLine());
+			
+			for(int i = 2 ; i<= Math.sqrt(((double)n)); i++){
+				ArrayList<Integer> t = new ArrayList<Integer>();
+				int temp = n;
+				
+				while(temp!=0) {
+					t.add(temp%i);
+//					System.out.println(temp%i);
+					temp/=i;
+					
+				}
+				if(isP(t)) {
+					System.out.println(i);
+				}
+				
+//				for (Integer i2:t) {
+//					System.out.print(i2);
+//				}
+//				System.out.println();
+				
+				
+			}
+			
+			for (int i = (int)Math.ceil(Math.sqrt(((double)n))); i >=1; i--) {
+				//System.out.println((((double)n)/i == n/i ) +"" + i);
+				if(((double)n)/i == n/i && n/i-1>i) {
+					System.out.println(n/i-1);
+				}
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+}

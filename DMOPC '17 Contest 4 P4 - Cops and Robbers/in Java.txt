@@ -1,0 +1,50 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class Cops {
+	public static int [] info = new int [1000000];
+	public static boolean  l = true;
+	public static void main(String[] args) {
+
+		BufferedReader in = new BufferedReader (new InputStreamReader (System.in));
+
+		for(int i = 0 ; i< 1000000; i ++) {
+			info[i] = i+1;
+		}
+		try {
+			int n = Integer.parseInt(in.readLine());
+			String [] t = in.readLine().split(" ");
+
+			String k = t[0];
+			Exit:{
+				for(int i = 0 ; i < n ; i ++) {
+					if (!t[i].equals(k)) {
+						l = false;
+						break Exit;
+					}
+				}
+			}
+			if (!l) {
+				for(int i = 0 ;i < n ; i ++) {
+					if(Integer.parseInt(t[i])==info[i]) {
+						int index = 0;
+						while(Integer.parseInt(t[i])==info[index] || Integer.parseInt(t[index]) == info[i]) {
+							index++;
+						}
+						int temp = info[i];
+						info[i]=info[index];
+						info[index]=temp;
+					}
+				}
+				for(int i = 0 ; i < n ; i ++) {
+					System.out.print(info[i] + " ");
+				}
+			}
+			else {
+				System.out.println(-1);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+}

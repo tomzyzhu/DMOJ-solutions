@@ -1,0 +1,83 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int n, k , r;
+int tree [100007];
+int s;
+void update(int index, int value){
+index++;
+while(index<=s){
+    tree[index-1]+=value;
+    index+= (index&-index);
+}
+}
+int query (int index){
+index++;
+int sum = 0;
+while(index>0){
+    sum += tree[index-1];
+    index-=(index&-index);
+}
+return sum;
+}
+
+
+void add(int index){
+    for(int i = index; i>=0; i--){
+        if(query(i)-query(i-1) == 0){
+            update(i,1);
+            //printf("returned here at %i starting from %i\n", i, index);
+            return;
+        }
+    }
+}
+
+void printT(){
+    for(int i = 0 ; i < n ; i ++){
+        printf("%i " , i);
+    }
+    printf("\n");
+    for(int i = 0 ; i < n ; i ++){
+        printf("%i " , query(i) - query(i-1));
+    }
+    printf("\n");
+}
+int main()
+{
+    scanf("%i%i%i", &n,&k,&r);
+    s = n;
+if(r!=2){
+    for(int i = 0 ; i < k; i ++){
+        //update(i,i);
+        int a;
+        scanf("%i", &a);
+        a--;
+        update(a, 1);
+    }
+   // printT();
+
+   // printf("%i\n" , query(7));
+
+    int ans = 0;
+    for(int i = 0 ; i +r -1 <n ; i++){
+        int sum = query(i+r-1) - query(i-1);
+        while(sum<2){
+            add(i+r-1);
+            ans++;
+            //printT();
+            //printf("added on at %i %i\n" , i, sum);
+        sum = query(i+r-1) - query(i-1);
+        }
+    }
+
+    printf("%i", ans);}
+    else{
+        printf("%i", n-k);
+    }
+//    for(int i = 0 ; i < n; i ++){
+  //      for(int i2 = i ; i2 < n; i2 ++){
+    //    printf("%i + %i + %i\n  ", query(i2) - query(i), i, i2);
+    //}
+   // }
+}

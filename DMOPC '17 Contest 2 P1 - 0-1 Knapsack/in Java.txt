@@ -1,0 +1,23 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Scanner;
+
+public class Secrets {
+	public static void main(String[] args) {
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		try {
+			int n = Integer.parseInt(in.readLine());
+			long ans = 0;
+			for(int i = 0 ; i < n ; i ++) {
+				String [] t = in.readLine().split(" ");
+				if(Integer.parseInt(t[1])>0) {
+					ans+=Integer.parseInt(t[0]);
+				}
+			}
+			System.out.println(ans);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+}

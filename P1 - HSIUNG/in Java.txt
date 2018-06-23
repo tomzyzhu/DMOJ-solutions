@@ -1,0 +1,42 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class HSIUNG {
+	public static void main(String[] args) {
+BufferedReader in =  new BufferedReader(new InputStreamReader (System.in));
+		
+		try {
+			
+			String [] t = in.readLine().split(" ");
+			
+			int a = Integer.parseInt(t[0]);
+			int b = Integer.parseInt(t[1]);
+			int c = Integer.parseInt(t[2]);
+			
+			boolean [] info = new boolean [c+1];
+			for(int i = 1 ; i <=c ; i ++) {
+				info[i]=false;
+			}
+			info[0] = true;
+			for(int i = b; i <= c ; i ++) {
+				if(info[i-b]) {
+					info[i] = true;
+				}
+			}
+			for(int i = a; i <= c ; i ++) {
+				if(info[i-a]) {
+					info[i] = true;
+				}
+			}
+			for(int i = c; i >=0 ; i --) {
+				if(info[i]) {
+					System.out.println(i);
+					System.exit(0);
+				}
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+}

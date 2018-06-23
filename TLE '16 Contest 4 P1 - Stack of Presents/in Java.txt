@@ -1,0 +1,31 @@
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class q1 {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner input = new Scanner(System.in);
+		
+		int numBox = input.nextInt();
+		int [] numWeight = new int [numBox];
+		
+		for(int index = 0; index < numBox; index++){
+			numWeight[index]=input.nextInt();
+		}
+		Arrays.sort(numWeight);
+		
+		
+		int reqWeight = numWeight[0];
+		int maxBox = 1;
+		
+		for(int index = 1; index < numBox; index++){
+			if (numWeight[index] >= reqWeight){
+				reqWeight+=numWeight[index];
+				maxBox+=1;
+			}
+		}
+		System.out.println(maxBox);
+	}
+
+}

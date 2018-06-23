@@ -1,0 +1,35 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class thing {
+	public static void main(String[] args) {
+		BufferedReader in = new BufferedReader (new InputStreamReader(System.in));
+
+		try {
+			int n = Integer.parseInt(in.readLine());
+			for(int i = 0 ; i < n ; i ++) {
+				String temp = in.readLine();
+				int t = 0;
+				for(int i2 = 0 ; i2 < temp.length(); i2 ++) {
+					t += Integer.parseInt(Character.toString(temp.charAt(i2)));
+				}
+//				System.out.println("t " +t );
+//				while(t>=10) {
+//					int t2 = 0;
+//					for(int i2 = 0 ; Math.pow(10, i2)<t; i2++) {
+//						t2+= t/Math.pow(10, i2)%10;
+//					}
+//					t = t2;
+//				}
+//				System.out.println(t);
+				if (t%9 ==0) {
+					System.out.println("9");
+					
+				}else
+					System.out.println(t%9);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+}

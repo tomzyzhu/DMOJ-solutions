@@ -1,0 +1,109 @@
+#include <bits/stdc++.h>
+using namespace std;
+		int main() {
+
+				int n;
+				scanf("%i", &n);
+				//int info [2] [n];
+				int total = 0;
+				vector <int> use;
+				map <int,int> input;
+				for(int i = 0 ; i < n ; i ++) {
+					int a, b;
+					scanf("%i%i", &a,&b);
+					total += a*b;
+					if(input.find(b)==input.end()){
+						input[b]= a;
+					}else{
+						input[b] = input[b]+a;
+					}
+				}
+				for(const auto &ent : input) {
+  					// ent1.first is the first key
+  					int b = ent.first;
+  					int a = ent.second;
+  					//use.push_back(a*b);
+  					//printf("a and b %i %i \n" , a, b);
+//					printf("add %i\n",a*b);
+					int nexta = a-(a & -a);
+					while (nexta > 0){
+						use.push_back((a & -a)*b);
+						//printf("add %i\n",(a & -a)*b);
+						a -= (a & -a);
+						nexta = a-(a & -a);
+    				}
+    				for(int i2= 0 ; pow(2,i2)<a; i2++){
+						use.push_back((int)(pow(2,i2))*b);
+					//printf("add %i\n",(int)(pow(2,i2))*b );
+					}
+    				use.push_back(b);
+    				//printf("add %i\n",b);
+				}
+
+//				for(int i = 0 ; i < n ; i ++) {
+//					int a, b;
+//					scanf("%i%i", &a,&b);
+//					total += a*b;
+//					// compress
+//
+////					use.push_back(a*b);
+////					printf("add %i\n",a*b);
+//					int nexta = a-(a & -a);
+//					while (nexta > 0){
+//						use.push_back((a & -a)*b);
+////						printf("add %i\n",(a & -a)*b);
+//						a -= (a & -a);
+//						nexta = a-(a & -a);
+//    				}
+//    				for(int i2= 0 ; pow(2,i2)<a; i2++){
+//						use.push_back((int)(pow(2,i2))*b);
+////						printf("add %i\n",(int)(pow(2,i2))*b );
+//					}
+//    				use.push_back(b);
+////    				printf("add %i\n",b);
+//				}
+
+				int half = total/2+1;
+				bool p [half];
+				for(int i = 0 ; i < half ; i ++) {
+					p[i]=false;
+				}
+				p[0]= true;
+
+				int mosti = 0;
+
+				for(int i = 0 ; i < use.size() ; i ++) {
+					int currentc = use[i];
+					//printf("using %i\n", currentc);
+					for(int i2 = mosti+currentc ; i2-currentc>=0 ; i2 --) {
+						if(i2<half&&p[i2-currentc]){
+							p[i2]= true;
+							mosti = max(mosti, i2);
+						}
+					}
+					//printf("mosti %i\n", mosti);
+				}
+
+//				for(int i = 0 ; i < n ; i ++) {
+//					int currentc = info[1][i];
+//					int maxamount = info[0][i];
+//					for(int i2 = mosti+currentc ; i2-currentc>=0 ; i2 --) {
+////						int used = 0;
+////						int tempi = i2;
+//						if(p[i2-currentc]){
+//							for(int i3 = 0; i3 < maxamount&& i2+(currentc*i3)<half; i3 ++){
+//								p[i2+ (currentc*i3)]=true;
+//								mosti=max(mosti,i2+ (currentc*i3) );
+//							}
+//						}
+////						while(used<maxamount && tempi<half &&p[tempi-currentc]) {
+////							p[tempi]= true;
+////							mosti=max(mosti, tempi);
+////							tempi += currentc;
+////							used++;
+////						}
+//					}
+//				}
+				printf("%i", abs(total-mosti-mosti));
+
+		}

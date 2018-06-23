@@ -1,0 +1,55 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+
+public class Balanced {
+	public static void main(String[] args) {
+		try {
+
+			BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+			for(int i = 0 ; i  5 ; i ++) {
+				if(test(in.readLine())) {
+					System.out.println(balanced);
+				}else {
+					System.out.println(not balanced);
+				}
+			}
+
+
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static boolean test(String s) {
+		ArrayListCharacter stack = new ArrayListCharacter();
+		for(int i = 0 ; i  s.length();i++) {
+			try {
+
+				if(s.charAt(i)=='{') {
+					stack.add('}');
+				}else if(s.charAt(i)=='[') {
+					stack.add(']');
+				}else if(s.charAt(i)=='(') {
+					stack.add(')');
+				}else if(s.charAt(i)=='}'s.charAt(i)==']'s.charAt(i)==')') {
+					if(stack.get(stack.size()-1)!=s.charAt(i)) {
+						System.out.println(stack.get(stack.size()-1));
+						return false;
+					}else {
+						stack.remove(stack.size()-1);
+					}
+				}
+			}catch(Exception e) {
+				e.printStackTrace();
+				return false;
+			}
+		}
+		if(stack.size()==0) {
+			return true;
+		}else {
+			return false;
+		}
+
+	}
+}

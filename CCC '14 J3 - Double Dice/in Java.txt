@@ -1,0 +1,21 @@
+import java.util.Scanner;
+
+public class Tri {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		
+		int n = Integer.parseInt(input.nextLine());
+		int x =100;
+		int y = 100;
+		for(int i = 0 ; i < n; i ++) {
+			int a = input.nextInt();
+			int b = input.nextInt();
+			if(a>b)
+				y-=a;
+			else if (b>a)
+				x-=b;
+		}
+		System.out.println(x);
+		System.out.println(y);
+	}
+}

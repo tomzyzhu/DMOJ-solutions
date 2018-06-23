@@ -1,0 +1,106 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.Comparator;
+
+public class Kayenne {
+
+	public static int x;
+	public static int y;
+	public static House[] house = new House[100];
+	public static int totaldemo;
+	public static int total;
+	
+	
+	public static void main(String[] args) {
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+
+		try {
+			for(int o = 0 ; o < 10 ; o ++) {
+				totaldemo = 0;
+				total = 0;
+				String [] t = in.readLine().split(" ");
+				
+				x = Integer.parseInt(t[0]);
+				y = Integer.parseInt(t[1]);
+				
+				for(int i = 0 ; i < 100; i ++) {
+					house [ i ] = new House();
+					t = in.readLine().split(" ") ;
+					house[i].dx = Integer.parseInt(t[0]);
+					house[i].dy = Integer.parseInt(t[1]);
+					
+					if(t[2].equals("R"))
+						house[i].demo = false;
+					else
+						house[i].demo = true;
+					//System.out.println("got " + i);
+				}
+				
+				for(int i = -50; i <=50 ; i++) {
+					for(int i2 = -50; i2 <=50 ; i2++) {
+						
+						if(Math.pow(Math.abs(i), 2)+Math.pow(Math.abs(i2), 2)<=2500) {
+							total++;
+
+							for(int i3 = 0; i3 <100 ; i3++) {
+
+								house[i3].distance = (int)(Math.pow(Math.abs(x+i-house[i3].dx), 2) + Math.pow(Math.abs(y+i2-house[i3].dy), 2));
+							}
+							Arrays.sort(house,new Comparator<House>() {
+
+								@Override
+								public int compare(House o1, House o2) {
+									// TODO Auto-generated method stub
+									if (o1.distance!=o2.distance)
+										return o1.distance-o2.distance;
+									if(o1.demo!=o2.demo)
+										if(o1.demo)
+											return -1;
+										else 
+											return 1;
+									return 0;
+								}
+								
+							});
+							
+//							for(int i3 = 0 ; i3 < 100; i3 ++) {
+//								System.out.print(house[i3].demo  + " " );
+//							}
+							//System.out.println();
+							int demoscore = 0;
+							if (house[0].demo)
+								demoscore++;
+							if (house[1].demo)
+								demoscore++;
+							int total = 2;
+							for(int index = 2; index<100 && house[index].distance==house[2].distance;index++) {
+								total++;
+								if(house[index].demo){
+									demoscore++;
+								}
+							}
+							///System.out.println(demoscore);
+							if(demoscore*2 >= total) {
+								totaldemo++;
+							}
+							
+						}
+					}
+				}
+				///System.out.println(totaldemo);
+				System.out.printf("%.1f\n", (double)(totaldemo)/(double)(total)*100);
+			}
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+}
+class House{
+	boolean demo;
+	int dx;
+	int dy;
+	int distance;
+}
