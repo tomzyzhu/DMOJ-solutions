@@ -1,0 +1,51 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+
+public class Jnkasdfasdfsadfa {
+	
+	public static void main(String[] args) {
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		
+		try {
+			String [] t = in.readLine().split(" ");
+			
+			int n = Integer.parseInt(t[0]);
+			int m = Integer.parseInt(t[1]);
+			
+			t = in.readLine().split(" ");
+			
+			int [] v1 = new int [n];
+			for(int i = 0 ; i < n ; i ++) {
+				v1 [i] = Integer.parseInt(t[i]);
+			}
+			
+			t = in.readLine().split(" ");
+			
+			int [] v2  = new int [m];
+			
+			for(int i = 0 ; i < m ; i ++) {
+				v2[i]= Integer.parseInt(t[i]);
+			}
+			
+			
+			int [][] dp = new int [n+1][m+1];
+			for(int i = 1 ; i <= n ;  i ++) {
+				for(int i2 = 1 ; i2 <= m ;  i2 ++) {
+					if(v1[i-1] == v2[i2-1]) {
+						dp[i][i2] = Math.max(Math.max(dp[i-1][i2-1]+1, dp[i-1][i2]), dp[i][i2-1]);
+					}else {
+
+						dp[i][i2] = Math.max(dp[i-1][i2], dp[i][i2-1]);
+					}
+				}
+			}
+			System.out.println(dp[n][m]);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+}
+
+
